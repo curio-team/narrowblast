@@ -36,5 +36,8 @@ return [
         'cost_in_credits' => 'Kosten in credits',
         'limit_purchases' => 'Aankopen beperken',
         'max_per_user' => 'Maximaal aantal per gebruiker',
+        'change_credits' => 'credits veranderen',
+        'change_in_credits' => 'De credits van ":user" veranderen met:',
+        'change_in_credits_description' => 'Bij positieve waarde worden credits toegevoegd, bij negatieve waarde worden credits afgetrokken.',
     ],
 ];

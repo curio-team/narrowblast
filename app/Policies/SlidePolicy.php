@@ -11,7 +11,19 @@ class SlidePolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the slide can view any models.
+     * Perform pre-authorization checks.
+     */
+    public function before(User $user, string $ability): bool|null
+    {
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+
+        return null;
+    }
+
+    /**
+     * Determine whether the user can view any models.
      *
      * @param  App\Models\User  $user
      * @return mixed
@@ -22,19 +34,19 @@ class SlidePolicy
     }
 
     /**
-     * Determine whether the slide can view the model.
+     * Determine whether the user can view the model.
      *
      * @param  App\Models\User  $user
      * @param  App\Models\Slide  $model
      * @return mixed
      */
-    public function view(?User $user, Slide $model)
+    public function view(User $user, Slide $model)
     {
-        return true;
+        return $user->id === $model->user_id;
     }
 
     /**
-     * Determine whether the slide can create models.
+     * Determine whether the user can create models.
      *
      * @param  App\Models\User  $user
      * @return mixed
@@ -45,7 +57,7 @@ class SlidePolicy
     }
 
     /**
-     * Determine whether the slide can update the model.
+     * Determine whether the user can update the model.
      *
      * @param  App\Models\User  $user
      * @param  App\Models\Slide  $model
@@ -53,11 +65,11 @@ class SlidePolicy
      */
     public function update(User $user, Slide $model)
     {
-        return true;
+        return $user->id === $model->user_id;
     }
 
     /**
-     * Determine whether the slide can delete the model.
+     * Determine whether the user can delete the model.
      *
      * @param  App\Models\User  $user
      * @param  App\Models\Slide  $model
@@ -65,7 +77,7 @@ class SlidePolicy
      */
     public function delete(User $user, Slide $model)
     {
-        return true;
+        return $user->id === $model->user_id;
     }
 
     /**
@@ -77,11 +89,11 @@ class SlidePolicy
      */
     public function deleteAny(User $user)
     {
-        return true;
+        return false;
     }
 
     /**
-     * Determine whether the slide can restore the model.
+     * Determine whether the user can restore the model.
      *
      * @param  App\Models\User  $user
      * @param  App\Models\Slide  $model
@@ -93,7 +105,7 @@ class SlidePolicy
     }
 
     /**
-     * Determine whether the slide can permanently delete the model.
+     * Determine whether the user can permanently delete the model.
      *
      * @param  App\Models\User  $user
      * @param  App\Models\Slide  $model
