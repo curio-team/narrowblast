@@ -134,6 +134,7 @@ class ScreenResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('slides_count')
                     ->label(ucfirst(__('crud.slides.slides_count')))
+                    ->sortable()
                     ->state(function (Screen $record) {
                         return $record->slides->count();
                     }),

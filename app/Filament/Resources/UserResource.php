@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Models\CreditLog;
 use App\Models\ShopItem;
 use App\Models\User;
 use Filament\Forms;
@@ -91,10 +92,18 @@ class UserResource extends Resource
                     })
                     ->requiresConfirmation()
                     ->action(function (array $data, User $record): void {
-                        $record->credits += $data['changeCredits'];
-                        $record->credits = max(0, min($record->credits, PHP_INT_MAX));
-                        $record->save();
-                    }),
+                        CreditLog::mutateWithTransaction(
+                            receiver: $record,
+                            sender: auth()->user(),
+                            amount: $data['changeCredits'],
+                            reason: 'administrator panel change',
+                            mutator: function() use($record, $data) {
+                                $record->credits += $data['changeCredits'];
+                                $record->credits = max(0, min($record->credits, PHP_INT_MAX));
+                                $record->save();
+                            });
+                        }
+                    ),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

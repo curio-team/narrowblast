@@ -86,8 +86,7 @@ class ShopItemResource extends Resource
                     ->formatStateUsing(function (string $state): string {
                         return \Str::limit($state, 50);
                     })
-                    ->searchable()
-                    ->sortable(),
+                    ->searchable(),
             ])
             ->filters([
                 //

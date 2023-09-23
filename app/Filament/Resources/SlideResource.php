@@ -115,6 +115,7 @@ class SlideResource extends Resource
                     }),
                 Tables\Columns\TextColumn::make('screen_count')
                     ->label(ucfirst(__('crud.slides.screen_count')))
+                    ->sortable()
                     ->state(function (Slide $record) {
                         return $record->screens()->count();
                     }),
