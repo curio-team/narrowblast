@@ -77,6 +77,7 @@ class ShopItemResource extends Resource
                 Tables\Columns\ImageColumn::make('image_path')
                     ->disk(ShopItem::STORAGE_DISK)
                     ->label(ucfirst(__('validation.attributes.image'))),
+
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),

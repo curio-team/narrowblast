@@ -101,9 +101,14 @@ class SlideResource extends Resource
                     ->state(function(Slide $record) {
                         return $record->approved_at !== null;
                     })
-                    ->updateStateUsing(function(Slide $record) {
-                        $record->approved_at = now();
-                        $record->approver_id = auth()->id();
+                    ->updateStateUsing(function(Slide $record, bool $state) {
+                        $record->approved_at = $state ? now() : null;
+                        $record->approver_id = $state ? auth()->id() : null;
+
+                        if (!$state) {
+                            $record->screenSlides()->delete();
+                        }
+
                         $record->save();
 
                         return $record;
