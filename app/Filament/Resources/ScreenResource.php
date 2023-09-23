@@ -24,6 +24,8 @@ class ScreenResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tv';
 
+    protected static ?string $navigationGroup = 'Narrowcasting';
+
     public static function form(Form $form): Form
     {
         return $form

@@ -18,8 +18,8 @@ return new class extends Migration
             $table->id();
 
             $table->string('name');
-            $table->string('description');
-            $table->string('image_path')->nullable();
+            $table->text('description');
+            $table->string('image_path', 512)->nullable();
 
             $table->integer('cost_in_credits')->unsigned();
             $table->unsignedInteger('max_per_user')->nullable();

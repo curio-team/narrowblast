@@ -33,5 +33,8 @@ return [
         'slides_count' => 'Aantal slides',
         'display_forever' => 'Voor altijd weergeven',
         'slide_duration' => 'Specifieke slide duur',
+        'cost_in_credits' => 'Kosten in credits',
+        'limit_purchases' => 'Aankopen beperken',
+        'max_per_user' => 'Maximaal aantal per gebruiker',
     ],
 ];

@@ -21,6 +21,8 @@ class SlideResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-bar';
 
+    protected static ?string $navigationGroup = 'Narrowcasting';
+
     public static function form(Form $form): Form
     {
         return $form

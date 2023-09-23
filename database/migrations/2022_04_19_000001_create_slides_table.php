@@ -17,7 +17,7 @@ return new class extends Migration {
 
             $table->string('title');
             $table->string('user_id')->references('id')->on('users')->cascadeOnDelete();
-            $table->text('path');
+            $table->string('path', 512);
 
             // Which teacher  this slide and when
             $table->string('approver_id')->nullable()->references('id')->on('users');
