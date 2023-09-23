@@ -6,7 +6,13 @@
 
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>Software Developer | Curio</title>
+        <title>{{ config('app.name') }}</title>
+
+        <style>
+            [x-cloak] {
+                display: none !important;
+            }
+        </style>
 
         @livewireStyles
         @filamentStyles

@@ -95,7 +95,7 @@ class UserResource extends Resource
                         CreditLog::mutateWithTransaction(
                             receiver: $record,
                             sender: auth()->user(),
-                            amount: $data['changeCredits'],
+                            amount: (int)$data['changeCredits'],
                             reason: 'administrator panel change',
                             mutator: function() use($record, $data) {
                                 $record->credits += $data['changeCredits'];

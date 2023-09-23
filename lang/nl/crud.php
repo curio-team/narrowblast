@@ -45,7 +45,24 @@ return [
         'cost_in_credits' => 'Kosten in credits',
         'limit_purchases' => 'Aankopen beperken',
         'max_per_user' => 'Maximaal aantal per gebruiker',
+
         'purchase' => 'kopen',
-        'purchase_log_reason' => 'Aankoop van :item in winkel',
+        'purchase_log_reason' => 'Aankoop van \':item\' in winkel',
+
+        'purchase_confirmation' => 'Aankoop bevestigen',
+        'purchase_confirmation_description' => 'Weet je zeker dat je \':item\' wilt kopen voor :credits credits?',
+        'purchase_confirmation_button' => 'Kopen',
+
+        'purchase_disabled_reasons' => [
+            'insufficient_credits' => 'onvoldoende voor aankoop',
+            'max_per_user' => 'maximaal aantal bereikt',
+        ],
+
+        'purchase_success' => 'Je hebt \':item\' gekocht',
+        'purchase_failed' => 'Aankoop mislukt, :reason',
+        'purchase_failed_reasons' => [
+            'insufficient_credits' => 'onvoldoende credits',
+            'max_per_user' => 'maximaal aantal bereikt',
+        ],
     ],
 ];
