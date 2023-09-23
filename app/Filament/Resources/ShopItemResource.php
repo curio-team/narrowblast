@@ -19,8 +19,6 @@ class ShopItemResource extends Resource
 {
     protected static ?string $model = ShopItem::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
-
     protected static ?string $navigationGroup = 'Credits';
 
     public static function form(Form $form): Form

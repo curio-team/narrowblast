@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
@@ -59,6 +60,16 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-arrow-uturn-left')
                     ->url(fn (): string => route('home'))
                     ->sort(-3), // Dashboard is -2
+            ])
+            ->navigationGroups([
+                NavigationGroup::make()
+                     ->label('Credits')
+                     ->collapsible(false)
+                     ->icon('heroicon-o-shopping-cart'),
+                NavigationGroup::make()
+                    ->label('Narrowcasting')
+                    ->collapsible(false)
+                    ->icon('heroicon-o-tv'),
             ]);
     }
 }

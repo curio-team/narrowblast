@@ -22,8 +22,6 @@ class ScreenResource extends Resource
 {
     protected static ?string $model = Screen::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-tv';
-
     protected static ?string $navigationGroup = 'Narrowcasting';
 
     public static function form(Form $form): Form
