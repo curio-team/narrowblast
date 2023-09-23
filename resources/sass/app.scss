@@ -1,0 +1,203 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('_fonts.scss');
+
+$text-color: #4A4343;
+$branding-color: #FFCC00;
+$branding-color-secondary: #4A4343;
+
+$padding: 1em;
+
+*{
+    box-sizing: border-box;
+}
+
+html{
+    font-family: Fellix,"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: $text-color;
+}
+
+html, body, .frame, .slide{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+h1, h2{
+    margin: 0;
+}
+
+h2{
+    color: $branding-color-secondary;
+    font-size: 2em;
+
+    span{
+        vertical-align: middle;
+    }
+
+    small{
+        font-weight: normal;
+        font-size: 1rem;
+    }
+
+    &.student{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+
+        .title{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .title-text{
+            &::before{
+                content: '(';
+            }
+
+            &::after{
+                content: ')';
+            }
+        }
+    }
+}
+
+.collapsed{
+    transform: scaleY(0) translateY(-100%);
+    transition: transform 0.1s ease-in-out;
+
+    &.show{
+        transform: scaleY(1) translateY(0);
+    }
+}
+
+.shadow{
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+}
+
+.frame{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+
+    &.animate{
+        border: 100vh solid $branding-color;
+        outline: 100vh solid $branding-color;
+        outline-offset: -2px; /* Workaround for 1px gap between border and outline on transformed element */
+        transform: rotate(45deg);
+
+        animation: reveal 1s linear;
+        animation-delay: 2s;
+        animation-fill-mode: forwards;
+    }
+}
+
+.developer, .branding{
+    background-color: $branding-color;
+    padding: $padding;
+}
+
+.developer{
+    text-align: center;
+    position: absolute;
+    transition: all 0.5s ease-in-out;
+    top: 0;
+    right: 0;
+
+    &.animate{
+        opacity: 0;
+        top: 50%;
+        right: 50%;
+        transform: translate(50%, -50%);
+
+        animation: move 3s ease-in-out;
+        animation-fill-mode: forwards;
+    }
+}
+
+.branding{
+    position: absolute;
+    display: none;
+    bottom: 0;
+    left: 0;
+    background: $branding-color-secondary;
+
+    svg{
+        margin-right: 2px;
+    }
+
+    a{
+        text-decoration: none;
+    }
+}
+
+@keyframes reveal {
+	0% {
+        border-width: 100%;
+    }
+	100% {
+        border-width: 0;
+        transform: rotate(0);
+    }
+}
+
+@keyframes move {
+	0% {
+        opacity: 0;
+    }
+    33%{
+        opacity: 1;
+        top: 50%;
+        right: 50%;
+        transform: translate(50%, -50%);
+    }
+	100% {
+        opacity: 1;
+        top: 0;
+        right: 0;
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes unfold {
+	0% {
+        transform: scaleY(0);
+    }
+	100% {
+        transform: scaleY(1);
+    }
+}
+
+@media screen and (max-width: 768px){
+    .developer{
+        width: 100%;
+        right: 0;
+    }
+
+    @keyframes move {
+        0% {
+            opacity: 0;
+        }
+        33%{
+            opacity: 1;
+            top: 50%;
+            right: 0;
+            transform: translate(0, -50%);
+        }
+        100% {
+            opacity: 1;
+            top: 0;
+            right: 0;
+            transform: translate(0, 0);
+        }
+    }
+}

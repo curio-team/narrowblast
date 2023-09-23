@@ -1,0 +1,37 @@
+@charset "UTF-8";
+@font-face {
+ font-family:Fellix;
+ src:local("Fellix Bold"),
+ local("Fellix-Bold"),
+ url(../fonts/Fellix-Bold.woff2) format("woff2"),
+ url(../fonts/Fellix-Bold.woff) format("woff");
+ font-weight:700;
+ font-style:normal
+}
+@font-face {
+ font-family:Fellix;
+ src:local("Fellix Bold Italic"),
+ local("Fellix-BoldItalic"),
+ url(../fonts/Fellix-BoldItalic.woff2) format("woff2"),
+ url(../fonts/Fellix-BoldItalic.woff) format("woff");
+ font-weight:700;
+ font-style:italic
+}
+@font-face {
+ font-family:Fellix;
+ src:local("Fellix Regular"),
+ local("Fellix-Regular"),
+ url(../fonts/Fellix-Regular.woff2) format("woff2"),
+ url(../fonts/Fellix-Regular.woff) format("woff");
+ font-weight:400;
+ font-style:normal
+}
+@font-face {
+ font-family:Fellix;
+ src:local("Fellix Regular Italic"),
+ local("Fellix-RegularItalic"),
+ url(../fonts/Fellix-RegularItalic.woff2) format("woff2"),
+ url(../fonts/Fellix-RegularItalic.woff) format("woff");
+ font-weight:400;
+ font-style:italic
+}
