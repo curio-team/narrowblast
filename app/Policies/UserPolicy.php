@@ -16,7 +16,8 @@ class UserPolicy
     {
         if (
             $user->isSuperAdmin()
-            && $ability !== 'create' // Nobody can create a user
+            && $ability !== 'create' // Nobody can create a user (since amologin handles that)
+            && $ability !== 'delete' // Nobody can delete a user (since amologin handles that)
         ) {
             return true;
         }

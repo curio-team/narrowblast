@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Models\ShopItem;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\Wizard\Step;
@@ -25,7 +26,32 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('id')
+                    ->disabled()
+                    ->readOnly()
+                    ->required(),
+                Forms\Components\TextInput::make('name')
+                    ->disabled()
+                    ->readOnly()
+                    ->required(),
+                Forms\Components\Repeater::make('shopItemUsers')
+                    ->relationship()
+                    ->orderColumn(false)
+                    ->schema(function(User $user) {
+                        return [
+                            Forms\Components\Select::make('shop_item_id')
+                                ->relationship('shopItem', 'name')
+                                ->searchable(['name'])
+                                ->preload()
+                                ->required(),
+                        ];
+                    })
+                    ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
+                        $data['cost_in_credits'] = 0;
+
+                        return $data;
+                    })
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -73,7 +99,6 @@ class UserResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->emptyStateActions([

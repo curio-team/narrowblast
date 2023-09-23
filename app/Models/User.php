@@ -79,4 +79,12 @@ class User extends Authenticatable implements FilamentUser
             ->withPivot('cost_in_credits')
             ->withTimestamps();
     }
+
+    /**
+     * The pivots for items that this user has purchased
+     */
+    public function shopItemUsers()
+    {
+        return $this->hasMany(ShopItemUser::class, 'user_id');
+    }
 }
