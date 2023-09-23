@@ -1,4 +1,4 @@
-<nav x-data="{ openSidebar: false }" class="max-w-prose mx-auto">
+<nav x-data="{ openSidebar: false }" class="max-w-screen-lg mx-auto">
     <x-stack-layout row class="flex justify-between h-20 bg-white shadow-md p-4">
         <div class="flex items-center gap-2">
             <a class="flex h-full w-[50px] sm:w-[100px] border-r border-zinc-200 sm:border-none pr-4 sm:pr-0"

@@ -494,6 +494,9 @@ video {
 .max-w-prose{
   max-width: 65ch;
 }
+.max-w-screen-lg{
+  max-width: 1024px;
+}
 .flex-shrink-0{
   flex-shrink: 0;
 }
