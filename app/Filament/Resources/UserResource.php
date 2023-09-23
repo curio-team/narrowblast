@@ -77,17 +77,17 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\Action::make('giveCredits')
-                    ->label(ucfirst(__('crud.slides.change_credits')))
+                    ->label(ucfirst(__('crud.user.change_credits')))
                     ->icon('heroicon-o-currency-dollar')
                     ->form(function(User $record) {
                         return [
                             Forms\Components\TextInput::make('changeCredits')
-                                ->label(__('crud.slides.change_in_credits', [
+                                ->label(__('crud.user.change_in_credits', [
                                     'user' => $record->name,
                                 ]))
                                 ->required(),
                             Forms\Components\Placeholder::make('tip')
-                                ->hint(__('crud.slides.change_in_credits_description'))
+                                ->hint(__('crud.user.change_in_credits_description'))
                         ];
                     })
                     ->requiresConfirmation()

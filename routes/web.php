@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ShopController;
 use App\Http\Controllers\SlideController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -29,24 +30,13 @@ Route::prefix('/')
     ->middleware('auth')
     ->group(function () {
 
-    // Route::resource('manage', SlideController::class, [
-    //     'names' => 'slides'
-    // ])->parameters([
-    //     'manage' => 'slide'
-    // ])->except([
-    //     'show'
-    // ])->middleware('auth.teacher');
     Route::get('/admin/slide-preview/{slide}', [SlideController::class, 'preview'])->name('slides.preview')->middleware('auth.teacher');
-});
 
-Route::middleware('auth.test')->group(function () {
-    // Route::get('/test', [SlideController::class, 'testShow'])->name('slides.test.show');
-    // Route::post('/test', [SlideController::class, 'testSubmit'])->name('slides.test.submit');
-    // Route::get('/test/submitted', [SlideController::class, 'testSubmitted'])->name('slides.test.submitted');
+    Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 });
 
 Route::get('/screen', [SlideController::class, 'slideShow'])->name('slides.slideShow');
 
 Route::get('/', function () {
-    return view('home');
+    return view('app.home');
 })->name('home');

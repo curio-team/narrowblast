@@ -1,2 +1,3 @@
+    @filamentScripts
     </body>
 </html>

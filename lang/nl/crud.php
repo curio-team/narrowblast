@@ -23,6 +23,12 @@ return [
         'removed' => 'Succesvol verwijdert',
     ],
 
+    'user' => [
+        'change_in_credits' => 'De credits van ":user" veranderen met:',
+        'change_in_credits_description' => 'Bij positieve waarde worden credits toegevoegd, bij negatieve waarde worden credits afgetrokken.',
+        'change_credits' => 'credits veranderen',
+    ],
+
     'slides' => [
         'title' => 'titel',
         'approved' => 'goedgekeurd',
@@ -33,11 +39,13 @@ return [
         'slides_count' => 'Aantal slides',
         'display_forever' => 'Voor altijd weergeven',
         'slide_duration' => 'Specifieke slide duur',
+    ],
+
+    'shop_items' => [
         'cost_in_credits' => 'Kosten in credits',
         'limit_purchases' => 'Aankopen beperken',
         'max_per_user' => 'Maximaal aantal per gebruiker',
-        'change_credits' => 'credits veranderen',
-        'change_in_credits' => 'De credits van ":user" veranderen met:',
-        'change_in_credits_description' => 'Bij positieve waarde worden credits toegevoegd, bij negatieve waarde worden credits afgetrokken.',
+        'purchase' => 'kopen',
+        'purchase_log_reason' => 'Aankoop van :item in winkel',
     ],
 ];

@@ -4,7 +4,7 @@
 
 - Custom Slide (14 dagen): 
     - Credits: 100
-    - Presenteer 30 dagen lang een eigen gemaakte 'slide' op NarrowBlast! Gebruik HTML en CSS om een enkele webpagina te maken en upload die in het systeem. Iedereen die langs de NarrowBlast loopt zal jouw slide zien. Jouw slide wordt eerst gecontroleerd alvorens deze wordt getoond.
+    - Presenteer 30 dagen lang een eigen gemaakte 'slide' op NarrowBlast! Gebruik HTML en CSS om een webpagina te maken en upload die naar ons platform. Iedereen die langs de NarrowBlast loopt zal jouw slide zien. Jouw slide wordt eerst gecontroleerd alvorens deze wordt getoond.
 
 ## Image Prompts for Dall-E through https://designer.microsoft.com/
 

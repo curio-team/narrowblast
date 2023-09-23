@@ -19,15 +19,6 @@ import 'notyf/notyf.min.css';
 window.Notyf = new Notyf();
 
 /**
- * AlpineJS - A rugged, minimal framework for composing JavaScript behavior in your markup.
- */
-import Alpine from 'alpinejs';
-
-window.Alpine = Alpine;
-
-Alpine.start();
-
-/**
  * Reveal.js for presentations
  */
 import 'reveal.js/dist/reveal.css';

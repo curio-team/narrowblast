@@ -41,7 +41,7 @@ class ShopItemResource extends Resource
                     ->downloadable(),
 
                 Forms\Components\TextInput::make('cost_in_credits')
-                    ->label(ucfirst(__('crud.slides.cost_in_credits')))
+                    ->label(ucfirst(__('crud.shop_items.cost_in_credits')))
                     ->numeric()
                     ->default(100)
                     ->minValue(0)
@@ -49,7 +49,7 @@ class ShopItemResource extends Resource
                     ->required(),
 
                 Forms\Components\Checkbox::make('limit_purchases')
-                    ->label(ucfirst(__('crud.slides.limit_purchases')))
+                    ->label(ucfirst(__('crud.shop_items.limit_purchases')))
                     ->live()
                     ->formatStateUsing(function (?ShopItem $record, ?bool $state): ?bool {
                         return $record?->max_per_user !== null;
@@ -60,7 +60,7 @@ class ShopItemResource extends Resource
                     ->default(false),
 
                 Forms\Components\TextInput::make('max_per_user')
-                    ->label(ucfirst(__('crud.slides.max_per_user')))
+                    ->label(ucfirst(__('crud.shop_items.max_per_user')))
                     ->numeric()
                     ->default(null)
                     ->minValue(0)

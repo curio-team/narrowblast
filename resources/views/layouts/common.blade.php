@@ -1,4 +1,4 @@
-<x-partials.header></x-partials.header>
+<x-partials.header />
 
 {{ $slot }}
 

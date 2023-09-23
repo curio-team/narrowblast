@@ -1,14 +1,12 @@
 <nav x-data="{ openSidebar: false }" class="max-w-screen-lg mx-auto">
     <x-stack-layout row class="flex justify-between h-20 bg-white shadow-md p-4">
-        <div class="flex items-center gap-2">
-            <a class="flex h-full w-[50px] sm:w-[100px] border-r border-zinc-200 sm:border-none pr-4 sm:pr-0"
-                href="{{ url('/') }}">
-                <x-logos.light-logo />
-            </a>
+        <a class="flex items-center gap-2 h-full border-r border-zinc-200 sm:border-none pr-4 sm:pr-0"
+            href="{{ url('/') }}">
+            <x-logos.light-logo class="w-[50px] sm:w-[100px]"/>
             <h1 class="font-bold text-2xl whitespace-nowrap">
                 🚀 NarrowBlast
             </h1>
-        </div>
+        </a>
 
         <button class="block md:hidden"
                 type="button"
@@ -55,12 +53,16 @@
 
     @auth
         <x-stack-layout row class="rounded-b items-stretch shadow-md overflow-clip gap-0">
-            <x-stack-layout row class="py-2 px-4 items-center grow bg-zinc-300/25 uppercase text-sm font-bold flex-wrap">
+            <x-stack-layout row class="py-2 px-4 items-center grow bg-zinc-300/25 flex-wrap">
+                <x-buttons.link href="{{ route('shop.index') }}" icon="shopping-cart">
+                    @lang('app.shop')
+                </x-buttons.link>
                 @if(Auth::user()->isSuperAdmin())
-                <a href="{{ route('filament.admin.pages.dashboard') }}"
+                <x-buttons.link href="{{ route('filament.admin.pages.dashboard') }}"
+                    icon="lock-closed"
                     target="_blank">
                     @lang('app.admin_panel')
-                </a>
+                </x-buttons.link>
                 @endif
             </x-stack-layout>
 
