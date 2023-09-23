@@ -1,4 +1,4 @@
-<nav x-data="{ openSidebar: false }" class="max-w-screen-lg mx-auto">
+<nav x-data="{ openSidebar: false }" class="max-w-screen-md lg:max-w-screen-lg mx-auto">
     <x-stack-layout row class="flex justify-between h-20 bg-white shadow-md p-4">
         <a class="flex items-center gap-2 h-full border-r border-zinc-200 sm:border-none pr-4 sm:pr-0"
             href="{{ url('/') }}">
@@ -16,7 +16,7 @@
                           height="32px" />
         </button>
 
-        <div class="md:!flex justify-end bg-white bottom-0 top-0 right-0 flex grow fixed md:static p-4 md:p-0 shadow-md md:shadow-none gap-4 flex-col md:flex-row"
+        <div class="md:!flex bg-white bottom-0 top-0 right-0 flex grow fixed md:static p-4 md:p-0 shadow-md md:shadow-none gap-4 flex-col md:flex-row"
             :class="{ 'hidden': !openSidebar }">
             <button class="block md:hidden self-end"
                     type="button"
@@ -52,7 +52,7 @@
     </x-stack-layout>
 
     @auth
-        <x-stack-layout row class="rounded-b items-stretch shadow-md overflow-clip gap-0">
+        <x-stack-layout tight row class="md:rounded-b items-stretch shadow-md overflow-clip">
             <x-stack-layout row class="py-2 px-4 items-center grow bg-zinc-300/25 flex-wrap">
                 <x-buttons.link href="{{ route('shop.index') }}" icon="shopping-cart">
                     @lang('app.shop')

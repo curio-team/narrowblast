@@ -1,3 +1,4 @@
+    @livewireScripts
     @filamentScripts
     </body>
 </html>
