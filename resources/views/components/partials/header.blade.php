@@ -8,9 +8,9 @@
 
         <title>Software Developer | Curio</title>
 
-        @vite(['resources/sass/app.scss', 'resources/js/app.js'])
         @livewireStyles
         @filamentStyles
+        @vite('resources/sass/app.scss')
 
         {{ $slot }}
     </head>

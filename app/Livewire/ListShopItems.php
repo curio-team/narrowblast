@@ -49,7 +49,6 @@ class ListShopItems extends Component implements HasForms, HasTable
                     ->icon('heroicon-o-currency-dollar')
                     ->requiresConfirmation()
                     ->action(function (ShopItem $record): void {
-                        dd('1');
                         $mutation = -$record->cost_in_credits;
                         /** @var \App\Models\User */
                         $user = auth()->user();
@@ -60,7 +59,7 @@ class ListShopItems extends Component implements HasForms, HasTable
                             amount: $mutation,
                             reason: __('crud.shop_items.purchase_log_reason', ['item' => $record->name]),
                             mutator: function() use($user, $mutation) {
-                                $user->credits -= $mutation;
+                                $user->credits += $mutation;
                                 $user->credits = max(0, min($user->credits, PHP_INT_MAX));
                                 $user->save();
                             });
