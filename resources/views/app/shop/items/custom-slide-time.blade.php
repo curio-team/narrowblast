@@ -1,17 +1,22 @@
 <div>
     <hr class="mb-4 border-gray-300" />
     @if ($activeSlide !== null)
-        <div class="flex justify-between gap-2">
-            <x-buttons.secondary href="{{ route('slides.preview', $activeSlide) }}" target="_blank" class="grow">
-                @lang('crud.slides.preview')
-            </x-buttons.secondary>
-            <form action="{{ route('slides.deactivate', $activeSlide) }}" method="post">
-                @csrf
-                <input type="hidden" name="shop_item_user_id" value="{{ $shopItemUser->id }}">
-                <x-buttons.danger submit>
-                    @lang('crud.slides.deactivate')
-                </x-buttons.danger>
-            </form>
+        <div class="flex flex-col gap-2 justify-stretch">
+            <span class="italic text-sm">
+                @lang('crud.slides.slide_is_active', ['slide' => $activeSlide->title])
+            </span>
+            <div class="flex justify-between gap-2">
+                <x-buttons.secondary href="{{ route('slides.preview', $activeSlide) }}?cachebust={{ time() }}" target="_blank" class="grow">
+                    @lang('crud.slides.preview')
+                </x-buttons.secondary>
+                <form action="{{ route('slides.deactivate', $activeSlide) }}" method="post">
+                    @csrf
+                    <input type="hidden" name="shop_item_user_id" value="{{ $shopItemUser->id }}">
+                    <x-buttons.danger submit>
+                        @lang('crud.slides.deactivate')
+                    </x-buttons.danger>
+                </form>
+            </div>
         </div>
     @else
         <form action="{{ route('slides.activateNew') }}" method="post" class="flex flex-col gap-2 justify-stretch" x-data>

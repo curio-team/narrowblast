@@ -132,7 +132,7 @@ class SlideResource extends Resource
                     ->icon('heroicon-o-eye')
                     ->color('secondary')
                     ->label(ucfirst(__('crud.slides.preview')))
-                    ->url(fn (Slide $record): string => route('slides.preview', $record))
+                    ->url(fn (Slide $record): string => route('slides.preview', $record).'?cachebust='.time())
                     ->openUrlInNewTab(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
