@@ -41,6 +41,13 @@ class ShopItemSeeder extends Seeder
                 'unique_id' => 'slide_powerup_js',
                 'cost_in_credits' => 50,
             ],
+            [
+                'name' => 'Slide Invite Systeem (incl. Javascript Power-up)',
+                'description' => 'Kies één slide die je hebt gemaakt en activeer er een uitnodigingssysteem voor. Doormiddel van Javascript (inbegrepen) kun je een uitnodigingscode aanvragen en die op het scherm tonen. Spelers kunnen zich dan in jouw slide registeren na het betalen van een door jou ingestelde inzet. Hiermee kun je bijvoorbeeld een quiz maken, of weddenschap spel. Dit werkt maar voor één slide, dus zorg dat je die goed getest hebt. Je kunt dit product wel vaker kopen om het op meerdere slides te gebruiken.',
+                'image_path' => 'betting.png',
+                'unique_id' => 'slide_invite_system',
+                'cost_in_credits' => 5000,
+            ],
         ];
 
         foreach ($shopItems as $shopItem) {

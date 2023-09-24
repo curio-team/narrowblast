@@ -13,15 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        // Items purchased by users
-        Schema::create('shop_item_user', function (Blueprint $table) {
+        Schema::create('invite_system_invitees', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('shop_item_id')->references('id')->on('shop_items')->cascadeOnDelete();
+            $table->foreignUuid('invite_system_id')->references('id')->on('invite_systems')->cascadeOnDelete();
             $table->string('user_id')->references('id')->on('users')->cascadeOnDelete();
-
-            $table->integer('cost_in_credits')->unsigned();
-            $table->json('data')->nullable();
+            $table->unsignedInteger('reserved_entry_fee_in_credits')->nullable();
 
             $table->timestamps();
         });
@@ -34,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shop_item_user');
+        Schema::dropIfExists('invite_system_invitees');
     }
 };

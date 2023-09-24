@@ -24,10 +24,10 @@ return new class extends Migration {
             $table->dateTime('finalized_at')->nullable();
 
             // Which teacher approved this slide and when
-            $table->string('approver_id')->nullable()->references('id')->on('users');
+            $table->string('approver_id')->nullable()->references('id')->on('users')->cascadeOnDelete();
             $table->dateTime('approved_at')->nullable();
 
-            $table->string('rejecter_id')->nullable()->references('id')->on('users');
+            $table->string('rejecter_id')->nullable()->references('id')->on('users')->cascadeOnDelete();
             $table->dateTime('rejected_at')->nullable();
             $table->string('rejection_reason')->nullable();
 

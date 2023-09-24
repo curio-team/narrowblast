@@ -42,17 +42,80 @@
             max-height: 50%;
             object-fit: cover;
         }
+        .hidden {
+            display: none;
+        }
+        #playerList {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5em;
+        }
+        #playerList > span::after {
+            content: ',';
+        }
     </style>
 </head>
 <body>
     <div id="slide">
-        <h1>Sample Slide</h1>
-        <p>Showing how to access the credits API to get users to bet money (TODO)</p>
-        <img src="https://media.giphy.com/media/LdOyjZ7io5Msw/giphy.gif" alt="Spectacular entrance">
+        <div>
+            <h1>Sample Slide</h1>
+            <p>Showing how to access the credits API to get users to bet money</p>
+        </div>
+        <div>
+            <h2>Invite Code: <span id="inviteCode"></span></h2>
+            <h2>Prize Pool: <span id="prizePool"></span></h2>
+            <h2>Players: <div id="playerList"></div></h2>
+        </div>
+        <img src="https://media.giphy.com/media/LdOyjZ7io5Msw/giphy.gif" alt="Showering in Cash" class="hidden">
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('#slide').classList.add('show');
+
+            const entryFee = 100;
+            let prizePool = 0;
+
+            function updatePrizePool() {
+                document.querySelector('#prizePool').innerText = prizePool;
+            }
+
+            window.addEventListener('message', function(event) {
+                console.log('Received message from parent window: ', event);
+                if (event.data.type === 'onInviteCode') {
+                    // When we receive the invite code, update the invite code element
+                    document.querySelector('#inviteCode').innerText = event.data.inviteCode;
+                } else if (event.data.type === 'onPlayerJoin') {
+                    // When a player joins update the player list
+                    const player = event.data.player;
+                    const playerList = document.querySelector('#playerList');
+                    const playerListItem = document.createElement('span');
+                    playerListItem.setAttribute('data-player-id', player.id);
+                    playerListItem.innerText = `${player.name} (${player.id})`;
+                    playerList.appendChild(playerListItem);
+
+                    // Update the prize pool
+                    prizePool += player.entryFee;
+                    updatePrizePool();
+                } else if (event.data.type === 'onPlayerLeave') {
+                    // When a player leaves update the player list
+                    const player = event.data.player;
+                    const playerList = document.querySelector('#playerList');
+                    const playerListItem = playerList.querySelector(`span[data-player-id="${player.id}"]`);
+                    playerList.removeChild(playerListItem);
+
+                    // Update the prize pool
+                    prizePool -= player.entryFee;
+                    updatePrizePool();
+                }
+            });
+
+            // Use postMessage to ask the parent window to send us the invite code
+            window.parent.postMessage({
+                type: 'getInviteCode',
+                entryFee: entryFee
+            }, '*');
         });
     </script>
 </body>
