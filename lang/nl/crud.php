@@ -69,5 +69,7 @@ return [
             'insufficient_credits' => 'onvoldoende credits',
             'max_per_user' => 'maximaal aantal bereikt',
         ],
+
+        'out_of_time' => 'Je hebt geen tijd meer over op dit item',
     ],
 ];

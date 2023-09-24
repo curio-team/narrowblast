@@ -1,5 +1,7 @@
 <div>
-    <hr class="mb-4 border-gray-300" />
+    @php
+        $asPercentageUsed = floor($timeUsedInHours / $timeTotalInHours * 100);
+    @endphp
     @if ($activeSlide !== null)
         <div class="flex flex-col gap-2 justify-stretch">
             <span class="italic text-sm">
@@ -18,7 +20,7 @@
                 </form>
             </div>
         </div>
-    @else
+    @elseif($asPercentageUsed < 100)
         <form action="{{ route('slides.activateNew') }}" method="post" class="flex flex-col gap-2 justify-stretch" x-data>
             @csrf
             <input type="hidden" name="shop_item_user_id" value="{{ $shopItemUser->id }}">
@@ -39,9 +41,6 @@
     @endif
     <hr class="my-4 border-gray-300" />
     <div class="relative pt-1">
-        @php
-            $asPercentage = floor($timeUsedInHours / $timeTotalInHours * 100);
-        @endphp
         <div class="flex mb-2 items-center justify-between">
             <div>
                 <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200">
@@ -50,12 +49,12 @@
             </div>
             <div class="text-right">
                 <span class="text-xs font-semibold inline-block text-pink-600">
-                    {{ $asPercentage }}%
+                    {{ $asPercentageUsed }}%
                 </span>
             </div>
         </div>
         <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-pink-200">
-            <div style="width:{{ $asPercentage }}%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-pink-500"></div>
+            <div style="width:{{ $asPercentageUsed }}%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-pink-500"></div>
         </div>
     </div>
 </div>
