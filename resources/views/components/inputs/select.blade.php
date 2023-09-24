@@ -12,7 +12,7 @@
     id="{{ $name }}"
     name="{{ $name }}"
     {{ ($required ?? false) ? 'required' : '' }}
-    {{ $attributes->merge(['class' => 'form-control']) }}
+    {{ $attributes->merge(['class' => 'rounded-lg border-zinc-400']) }}
     autocomplete="off"
 >{{ $slot }}</select>
 

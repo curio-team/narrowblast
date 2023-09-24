@@ -22,9 +22,9 @@
         <form action="{{ route('slides.activateNew') }}" method="post" class="flex flex-col gap-2 justify-stretch" x-data>
             @csrf
             <input type="hidden" name="shop_item_user_id" value="{{ $shopItemUser->id }}">
-            <div class="flex gap-2 items-center justify-stretch">
+            <div class="flex flex-col gap-2 items-stretch">
                 <x-inputs.select name="slide_id" label="Slide:" class="grow" x-ref="slideSelect">
-                    @forelse(auth()->user()->approvedSlides as $slide)
+                    @forelse($selectableSlides as $slide)
                         <option value="{{ $slide->id }}">{{ $slide->title }}</option>
                     @empty
                         <option value="" disabled>Geen slides beschikbaar</option>

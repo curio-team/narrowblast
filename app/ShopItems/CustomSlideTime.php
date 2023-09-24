@@ -35,8 +35,9 @@ class CustomSlideTime implements ShopItemInterface
         $timeUsedInHours = $shopItemUser->data['time_used_in_seconds'] / 60 / 60;
         $activeSlideId = $shopItemUser->data['active_slide'] ?? null;
         $activeSlide = $activeSlideId ? $shopItemUser->user->slides()->find($activeSlideId) : null;
+        $selectableSlides = auth()->user()->approvedSlides()->withCount('screens')->where('screens_count', 0);
 
-        return view('app.shop.items.custom-slide-time', compact('timeUsedInHours', 'timeTotalInHours', 'activeSlide', 'shopItemUser'))->render();
+        return view('app.shop.items.custom-slide-time', compact('timeUsedInHours', 'timeTotalInHours', 'activeSlide', 'shopItemUser', 'selectableSlides'))->render();
     }
 
     /**
