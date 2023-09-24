@@ -19,15 +19,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Slide Show Tick Interval
+    | Slide Show Settings
     |--------------------------------------------------------------------------
     |
-    | This value is the interval in seconds between each tick of the slide show.
+    | slide_show_tick_interval_in_seconds:
+    |       This value is the interval in seconds between each tick of the
+    |       slide show.
     |
-    | Note that some items will save to the database on each tick, so this value
-    | should not be too low.
+    |       Note that some items will save to the database on each tick, so
+    |       this value should not be too low.
+    |
+    | slide_show_secret_tick_key:
+    |       This value is the secret key that should be entered on the
+    |       Narrowcasting screen the first time. This prevents just anyone
+    |       from calling the tick endpoint.
     */
     'slide_show_tick_interval_in_seconds' => env('SLIDE_SHOW_TICK_INTERVAL_IN_SECONDS', 15),
+    'slide_show_secret_tick_key' => env('SLIDE_SHOW_SECRET_TICK_KEY', 'secret'),
 
     /*
     |--------------------------------------------------------------------------

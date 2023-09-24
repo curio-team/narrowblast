@@ -41,6 +41,13 @@ class SlideController extends Controller
      */
     public function slideShowTick(Request $request, Screen $screen)
     {
+        // Check if the header contains our secret key
+        if ($request->header('X-Secret-Tick-Key') !== config('app.slide_show_secret_tick_key')) {
+            return response()->json([
+                'error' => 'Invalid secret tick key',
+            ], 403);
+        }
+
         $screenSlides = $screen->screenSlides;
         $slidePublicPaths = [];
         $shopItemUsers = ShopItemUser::where(function(Builder $query) use ($screenSlides) {

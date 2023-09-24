@@ -9,7 +9,9 @@ This system allows students to create (interactive) slides for narrowcasting. St
 * Run the following commands in the root of that repo:
     * `composer install`
     * `npm install`
-    * Create and configure the `.env` file, filling `AMO_CLIENT_ID` and `AMO_CLIENT_SECRET` with the correct (secret) app secrets
+    * Create and configure the `.env` file:
+        * Fill `AMO_CLIENT_ID` and `AMO_CLIENT_SECRET` with the correct (secret) app secrets for the [amoclient OpenID auth](https://github.com/StudioKaa/amoclient)
+        * Fill `SLIDE_SHOW_SECRET_TICK_KEY` with a random secret string. This is used to prevent spamming of the slideshow tick endpoint. When setting up a narrowcasting screen you will have to enter this.
     * `php artisan storage:link`
     * `php artisan migrate --seed`
     * `npm run watch`
