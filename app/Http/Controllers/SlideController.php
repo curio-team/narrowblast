@@ -74,6 +74,7 @@ class SlideController extends Controller
 
         return response()->json([
             'slides' => $slides,
+            'csrfToken' => csrf_token(),
         ]);
     }
 

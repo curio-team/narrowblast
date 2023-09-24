@@ -22,6 +22,7 @@
     <script>
         const tickUrl = `{{ route('slides.slideShowTick', $screen) }}`;
         const slideContainerEl = document.getElementById('slideContainer');
+        let latestCsrfToken = '{{ csrf_token() }}';
         let hasLoaded = false;
 
         function clearSlides() {
@@ -79,7 +80,7 @@
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
                     'X-Secret-Tick-Key': secretTickKey,
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': latestCsrfToken
                 },
                 body: JSON.stringify({
                     'screen_id': {{ $screen->id }},
@@ -93,14 +94,16 @@
                     localStorage.removeItem('secretTickKey');
                     window.location.reload();
                     return;
-
                 }
+
                 if(!hasLoaded) {
                     hasLoaded = true;
                     clearSlides();
                 }
 
                 updateSlideChanges(data.slides);
+
+                latestCsrfToken = data.csrfToken;
             })
             .catch(error => {
                 console.error(error);
