@@ -5,4 +5,6 @@ return [
     'student' => 'student',
     'credits' => 'credits',
     'shop' => 'Virtuele Winkel',
+    'inventory' => 'Inventaris',
+    'inventory_items' => 'Jouw Items',
 ];

@@ -76,7 +76,8 @@ class User extends Authenticatable implements FilamentUser
     public function purchasedShopItems()
     {
         return $this->belongsToMany(ShopItem::class, 'shop_item_user', 'user_id', 'shop_item_id')
-            ->withPivot('cost_in_credits')
+            ->withPivot('cost_in_credits', 'data')
+            ->using(ShopItemUser::class)
             ->withTimestamps();
     }
 

@@ -27,10 +27,12 @@ class ListShopItems extends Component implements HasForms, HasTable
         return $table
             ->query(ShopItem::query())
             ->columns([
-                Tables\Columns\ImageColumn::make('image_path'),
+                Tables\Columns\ImageColumn::make('image_path')
+                    ->visibleFrom('md'),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')
+                    ->visibleFrom('lg')
                     ->formatStateUsing(function (string $state): string {
                         return \Str::limit($state, 20);
                     })
@@ -129,6 +131,8 @@ class ListShopItems extends Component implements HasForms, HasTable
                                 $user->save();
 
                                 $this->dispatch('shop-item-purchased', shopItem: $record);
+
+                                $record->purchaseFor($user);
 
                                 Notification::make()
                                     ->title(__('crud.shop_items.purchase_success', ['item' => $record->name]))

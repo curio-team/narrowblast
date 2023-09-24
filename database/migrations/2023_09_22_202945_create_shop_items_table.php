@@ -18,6 +18,10 @@ return new class extends Migration
             $table->id();
 
             $table->string('name');
+
+            // Unique name used to find an item from code
+            $table->string('unique_id')->unique();
+
             $table->text('description');
             $table->string('image_path', 512)->nullable();
 

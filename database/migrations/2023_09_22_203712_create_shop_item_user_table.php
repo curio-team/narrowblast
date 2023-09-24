@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('user_id')->references('id')->on('users');
 
             $table->integer('cost_in_credits')->unsigned();
+            $table->json('data')->nullable();
 
             $table->timestamps();
         });

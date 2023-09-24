@@ -29,6 +29,15 @@ class ShopItemResource extends Resource
                     ->maxLength(255)
                     ->autofocus()
                     ->required(),
+
+                Forms\Components\TextInput::make('unique_id')
+                    ->maxLength(255)
+                    ->unique('shop_items', 'unique_id')
+                    ->disabled(function (?ShopItem $record) {
+                        return $record?->exists ?? false;
+                    })
+                    ->required(),
+
                 Forms\Components\Textarea::make('description')
                     ->maxLength(1024)
                     ->required(),

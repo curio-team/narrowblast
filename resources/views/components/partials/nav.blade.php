@@ -16,7 +16,7 @@
                           height="32px" />
         </button>
 
-        <div class="md:!flex bg-white bottom-0 top-0 right-0 flex grow fixed md:static p-4 md:p-0 shadow-md md:shadow-none gap-4 flex-col md:flex-row"
+        <div x-cloak class="md:!flex bg-white bottom-0 top-0 right-0 flex fixed md:static p-4 md:p-0 shadow-md md:shadow-none gap-4 flex-col md:flex-row"
             :class="{ 'hidden': !openSidebar }">
             <button class="block md:hidden self-end"
                     type="button"
@@ -56,6 +56,9 @@
             <x-stack-layout row class="py-2 px-4 items-center grow bg-zinc-300/25 flex-wrap">
                 <x-buttons.link href="{{ route('shop.index') }}" icon="shopping-cart">
                     @lang('app.shop')
+                </x-buttons.link>
+                <x-buttons.link href="{{ route('shop.inventory') }}" icon="archive-box">
+                    @lang('app.inventory')
                 </x-buttons.link>
                 @if(Auth::user()->isSuperAdmin())
                 <x-buttons.link href="{{ route('filament.admin.pages.dashboard') }}"

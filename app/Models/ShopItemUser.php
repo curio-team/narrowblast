@@ -12,6 +12,10 @@ class ShopItemUser extends Pivot
         'cost_in_credits',
     ];
 
+    protected $casts = [
+        'data' => 'array',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

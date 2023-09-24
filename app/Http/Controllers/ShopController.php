@@ -13,4 +13,14 @@ class ShopController extends Controller
     {
         return view('app.shop.index');
     }
+
+    /**
+     * Displays the users inventory
+     */
+    public function inventory()
+    {
+        $items = auth()->user()->purchasedShopItems;
+
+        return view('app.shop.inventory', compact('items'));
+    }
 }

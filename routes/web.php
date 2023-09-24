@@ -33,6 +33,7 @@ Route::prefix('/')
     Route::get('/admin/slide-preview/{slide}', [SlideController::class, 'preview'])->name('slides.preview')->middleware('auth.teacher');
 
     Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+    Route::get('/inventory', [ShopController::class, 'inventory'])->name('shop.inventory');
 });
 
 Route::get('/screen', [SlideController::class, 'slideShow'])->name('slides.slideShow');
