@@ -87,9 +87,7 @@ class JavascriptSlide implements ShopItemInterface
                 })
                 ->formatStateUsing(function (bool $state) {
                     return $state ? 'Yes' : 'No';
-                })
-                ->searchable()
-                ->sortable(),
+                }),
         ];
     }
 }

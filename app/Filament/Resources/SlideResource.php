@@ -112,11 +112,13 @@ class SlideResource extends Resource
                     ->formatStateUsing(function (bool $state) {
                         return $state ? 'Yes' : 'No';
                     })
-                    ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\ToggleColumn::make('approved')
                     ->label(ucfirst(__('crud.slides.approved')))
-                    ->sortable()
+                    ->sortable(true, function (Builder $query, string $direction) {
+                        return $query->orderBy('approved_at', $direction);
+                    })
                     ->state(function(Slide $record) {
                         return $record->approved_at !== null;
                     })
@@ -137,7 +139,9 @@ class SlideResource extends Resource
                     }),
                 Tables\Columns\TextColumn::make('screen_count')
                     ->label(ucfirst(__('crud.slides.screen_count')))
-                    ->sortable()
+                    ->sortable(true, function (Builder $query, string $direction) {
+                        return $query->withCount('screens')->orderBy('screens_count', $direction);
+                    })
                     ->state(function (Slide $record) {
                         return $record->screens()->count();
                     }),
