@@ -19,6 +19,8 @@ return new class extends Migration {
             $table->string('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->string('path', 512);
 
+            $table->json('data')->nullable();
+
             // Which teacher  this slide and when
             $table->string('approver_id')->nullable()->references('id')->on('users');
             $table->dateTime('approved_at')->nullable();

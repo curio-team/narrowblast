@@ -6,6 +6,7 @@ use App\Events\SlideChanged;
 use App\Events\SlideDeleted;
 use App\Jobs\RemovePreviewSlide;
 use App\Models\Scopes\Searchable;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Storage;
@@ -40,6 +41,10 @@ class Slide extends Model
         'updated' => SlideChanged::class,
     ];
 
+    protected $casts = [
+        'data' => AsArrayObject::class,
+    ];
+
     protected $fillable = [
         'title',
         'path',
@@ -64,6 +69,20 @@ class Slide extends Model
     public function scopeOnlyApproved($query)
     {
         return $query->whereNotNull('approved_at');
+    }
+
+    /**
+     *
+     * Methods
+     *
+     */
+
+    public function setData(string $key, mixed $value)
+    {
+        $data = $this->data ?? new \ArrayObject();
+        $data[$key] = $value;
+        $this->data = $data;
+        $this->save();
     }
 
     /**

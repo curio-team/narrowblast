@@ -37,6 +37,8 @@ Route::prefix('/')
     Route::get('/slides/{slide}/tmp-preview/', [SlideController::class, 'preview'])->name('slides.preview')->middleware('throttle:10,1');
     Route::post('/slides/activate-new', [SlideController::class, 'activateNew'])->name('slides.activateNew')->middleware('throttle:10,1');
     Route::post('/slides/{slide}/deactivate', [SlideController::class, 'deactivate'])->name('slides.deactivate')->middleware('throttle:10,1');
+
+    Route::post('/slides/powerUpJavascript', [SlideController::class, 'powerUpJavascript'])->name('slides.powerUpJavascript')->middleware('throttle:10,1');
 });
 
 Route::post('/screen/{screen}/tick', [SlideController::class, 'slideShowTick'])->name('slides.slideShowTick');

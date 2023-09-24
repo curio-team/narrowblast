@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\ShopItem;
 use App\Models\Slide;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -35,6 +36,11 @@ class ListSlides extends Component implements HasForms, HasTable
             $query->whereNull('approved_at');
         }
 
+        $customSlideColumns = ShopItem::callUserShopItemMethods('getCustomSlideColumns', $this->isApproved)
+            ->filter(fn ($column) => $column !== false)
+            ->flatten()
+            ->toArray();
+
         return $table
             ->query($query)
             ->columns([
@@ -51,6 +57,7 @@ class ListSlides extends Component implements HasForms, HasTable
                             ]
                         :   []
                 ),
+                ...$customSlideColumns,
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

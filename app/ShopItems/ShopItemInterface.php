@@ -4,6 +4,7 @@ namespace App\ShopItems;
 
 use App\Models\ShopItem;
 use App\Models\ShopItemUser;
+use App\Models\Slide;
 
 interface ShopItemInterface
 {
@@ -49,4 +50,9 @@ interface ShopItemInterface
      * The ShopItemUser will NOT be saved after this method is called, so you must save it yourself.
      */
     public static function onTick(ShopItem $shopItem, ShopItemUser $shopItemUser, ...$arguments): bool;
+
+    /**
+     * Called to get custom slide column for the slides table
+     */
+    public static function getCustomSlideColumns(ShopItem $shopItem, ShopItemUser $shopItemUser, bool $isApproved): false|array;
 }

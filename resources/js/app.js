@@ -5,7 +5,7 @@ import Reveal from 'reveal.js';
 import Markdown from 'reveal.js/plugin/markdown/markdown.esm.js';
 
 if (document.querySelector('.reveal')) {
-    window.RevealDeck = new Reveal({
+    const reveal = new Reveal({
         plugins: [Markdown],
 
         autoSlide: 5000,
@@ -16,5 +16,22 @@ if (document.querySelector('.reveal')) {
         controls: false,
         // progress: false,
     });
-    window.RevealDeck.initialize();
+
+    // ! Workaround: I'd really like Reveal.js to have a callback for when an iframe is loaded, but don't have the time to make a PR yet.
+    // Detour creating iframe elements and call an event (iframecreated) when they are loaded
+    window._oldCreateElement = document.createElement;
+    document.createElement = function () {
+        const element = window._oldCreateElement.apply(this, arguments);
+
+        if (element.tagName === 'IFRAME') {
+            document.dispatchEvent(new CustomEvent('iframecreated', { detail: element }));
+        }
+
+        return element;
+    };
+    // ! End of Workaround
+
+    reveal.initialize();
+
+    window.RevealDeck = reveal;
 }

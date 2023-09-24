@@ -90,6 +90,21 @@ class ShopItem extends Model
     }
 
     /**
+     * Calls the given method on all shop item classes that the user owns
+     */
+    static function callUserShopItemMethods(string $method, ...$arguments): \Illuminate\Support\Collection
+    {
+        $user = auth()->user();
+        $results = collect();
+
+        foreach ($user->shopItemUsers as $shopItemUser) {
+            $results->push($shopItemUser->shopItem->callShopItemMethod($method, $shopItemUser, ...$arguments));
+        }
+
+        return $results;
+    }
+
+    /**
      * Purchases an item for the specified user.
      * Does not deduct credits, this should be done before calling this method and in a transaction with this method.
      */

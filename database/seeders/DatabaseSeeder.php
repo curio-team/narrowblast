@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Screen;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,6 +14,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //$this->call(SlideSeeder::class);
+        // Seed the Narrowcasting screen at the front door
+        Screen::create([
+            'name' => 'NarrowBlast Voordeur',
+        ]);
+
+        $this->call(ShopItemSeeder::class);
     }
 }

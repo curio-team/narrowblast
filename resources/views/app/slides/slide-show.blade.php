@@ -17,6 +17,8 @@
         </div>
     </div>
 
+    @include('app.slides.sandbox-iframe-script')
+
     <script>
         const tickUrl = `{{ route('slides.slideShowTick', $screen) }}`;
         const slideContainerEl = document.getElementById('slideContainer');
@@ -26,30 +28,35 @@
             slideContainerEl.innerHTML = '';
         }
 
-        function addSlide(publicPath) {
-            slideContainerEl.innerHTML += `<section data-background-iframe="${publicPath}"></section>`;
+        function addSlide(slide) {
+            slideContainerEl.innerHTML += `<section data-background-iframe="${slide.publicPath}"></section>`;
+
+            if(slide.data.has_javascript_powerup) {
+                routesWithJavascript.set(slide.publicPath, true);
+            }
         }
 
         function findSlideByPublicPath(publicPath) {
             return slideContainerEl.querySelector(`section[data-background-iframe="${publicPath}"]`);
         }
 
-        function updateSlideChanges(publicPaths) {
+        function updateSlideChanges(slides) {
             const slideEls = slideContainerEl.querySelectorAll('section[data-background-iframe]');
             let madeChanges = false;
 
             for (const slideEl of slideEls) {
                 const publicPath = slideEl.getAttribute('data-background-iframe');
+                const slideDataIndex = slides.findIndex(slide => slide.publicPath === publicPath);
 
-                if (!publicPaths.includes(publicPath)) {
+                if (slideDataIndex === -1) {
                     slideEl.remove();
                     madeChanges = true;
                 }
             }
 
-            for (const publicPath of publicPaths) {
-                if (!findSlideByPublicPath(publicPath)) {
-                    addSlide(publicPath);
+            for (const slide of slides) {
+                if (!findSlideByPublicPath(slide.publicPath)) {
+                    addSlide(slide);
                     madeChanges = true;
                 }
             }
@@ -93,7 +100,7 @@
                     clearSlides();
                 }
 
-                updateSlideChanges(data.public_paths);
+                updateSlideChanges(data.slides);
             })
             .catch(error => {
                 console.error(error);

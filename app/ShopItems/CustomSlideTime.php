@@ -139,4 +139,12 @@ class CustomSlideTime implements ShopItemInterface
 
         return true;
     }
+
+    /**
+     * Called to get custom slide column for the slides table
+     */
+    public static function getCustomSlideColumns(ShopItem $shopItem, ShopItemUser $shopItemUser, bool $isApproved): false|array
+    {
+        return false;
+    }
 }

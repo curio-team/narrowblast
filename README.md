@@ -13,7 +13,7 @@ This system allows students to create (interactive) slides for narrowcasting. St
         * Fill `AMO_CLIENT_ID` and `AMO_CLIENT_SECRET` with the correct (secret) app secrets for the [amoclient OpenID auth](https://github.com/StudioKaa/amoclient)
         * Fill `SLIDE_SHOW_SECRET_TICK_KEY` with a random secret string. This is used to prevent spamming of the slideshow tick endpoint. When setting up a narrowcasting screen you will have to enter this.
     * `php artisan storage:link`
-    * `php artisan migrate --seed`
+    * `php artisan migrate --seed` (The seeder automatically adds the shop items and 1 screen)
     * `npm run watch`
     * `php artisan serve`
 

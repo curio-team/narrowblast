@@ -44,6 +44,7 @@ return [
         'display_forever' => 'Voor altijd weergeven',
         'slide_duration' => 'Specifieke slide duur',
         'slide_is_active' => 'Jouw slide \':slide\' is actief en wordt weergegeven op de schermen.',
+        'slide_opwaarderen_gebruikt' => 'Er is al een slide opgewaardeerd met JavaScript!',
     ],
 
     'shop_items' => [
