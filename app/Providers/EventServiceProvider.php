@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use App\Events\ScreenSlideCreated;
+use App\Events\ScreenSlideDeleted;
 use App\Events\SlideChanged;
 use App\Events\SlideDeleted;
 use App\Listeners\DeleteOutdatedSlideFiles;
+use App\Listeners\DeleteScreenSlideFiles;
+use App\Listeners\ExtractScreenSlideFiles;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -26,6 +30,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         SlideChanged::class => [
             DeleteOutdatedSlideFiles::class,
+        ],
+        ScreenSlideCreated::class => [
+            ExtractScreenSlideFiles::class,
+        ],
+        ScreenSlideDeleted::class => [
+            DeleteScreenSlideFiles::class,
         ],
     ];
 

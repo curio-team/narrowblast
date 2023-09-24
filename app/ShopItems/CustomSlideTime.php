@@ -2,6 +2,8 @@
 
 namespace App\ShopItems;
 
+use App\Models\Screen;
+use App\Models\ScreenSlide;
 use App\Models\ShopItem;
 use App\Models\ShopItemUser;
 use App\Models\Slide;
@@ -62,9 +64,22 @@ class CustomSlideTime implements ShopItemInterface
                 ]);
             }
 
+            $screenSlide = new ScreenSlide;
+            $screenSlide->slide_id = $slide->id;
+            $screenSlide->activator_id = auth()->id();
+            $screenSlide->displays_from = now();
+            $screenSlide->displays_until = now()->addSeconds($timeLeft);
+
+            foreach (Screen::all() as $screen) {
+                $screenSlide->screen()->associate($screen);
+            }
+
+            $screenSlide->save();
+
             // Merge the active slide into the data
             $shopItemUser->data = array_merge($shopItemUser->data, [
                 'active_slide' => $slide->id,
+                'screen_slide_id' => $screenSlide->id,
                 'active_slide_start_time' => time(),
             ]);
         } else {
@@ -80,6 +95,14 @@ class CustomSlideTime implements ShopItemInterface
                 'active_slide' => null,
                 'active_slide_start_time' => null,
             ]);
+
+            if (isset($shopItemUser->data['screen_slide_id'])) {
+                $screenSlide = ScreenSlide::find($shopItemUser->data['screen_slide_id']);
+
+                if($screenSlide) {
+                    $screenSlide->delete();
+                }
+            }
         }
 
         return null;

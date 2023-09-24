@@ -40,7 +40,7 @@ class ScreenResource extends Resource
                         return [
                             Forms\Components\Select::make('slide_id')
                                 ->relationship('slide', 'title', function (Builder $query, ?ScreenSlide $record) use($screen) {
-                                    $alreadySelectedExceptSelf = $screen->slides->pluck('slide_id');
+                                    $alreadySelectedExceptSelf = $screen->screenSlides->pluck('slide_id');
 
                                     if($record !== null) {
                                         $alreadySelectedExceptSelf = $alreadySelectedExceptSelf->filter(fn ($id) => $id !== $record->slide_id);
@@ -136,7 +136,7 @@ class ScreenResource extends Resource
                     ->label(ucfirst(__('crud.slides.slides_count')))
                     ->sortable()
                     ->state(function (Screen $record) {
-                        return $record->slides->count();
+                        return $record->screenSlides->count();
                     }),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label(ucfirst(__('validation.attributes.updated_at')))
@@ -147,6 +147,12 @@ class ScreenResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\Action::make('view')
+                    ->icon('heroicon-o-eye')
+                    ->color('secondary')
+                    ->label(ucfirst(__('crud.screens.view')))
+                    ->url(fn (Screen $record): string => route('slides.slideShow', $record))
+                    ->openUrlInNewTab(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])

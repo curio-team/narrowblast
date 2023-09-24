@@ -10,7 +10,7 @@ class Screen extends Model
     use HasFactory;
 
     protected $with = [
-        'slides',
+        'screenSlides',
     ];
 
     protected $fillable = [
@@ -22,7 +22,7 @@ class Screen extends Model
      * Relationships
      *
      */
-    public function slides()
+    public function screenSlides()
     {
         return $this->hasMany(ScreenSlide::class);
     }

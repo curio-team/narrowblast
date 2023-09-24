@@ -18,6 +18,9 @@ class Slide extends Model
     const STORAGE_DISK = 'local';
     const FILE_DIRECTORY = 'slides';
 
+    const LIVE_STORAGE_DISK = 'public';
+    const LIVE_FILE_DIRECTORY = 'slides';
+
     const PREVIEW_STORAGE_DISK = 'public';
     const PREVIEW_FILE_DIRECTORY = 'slides-preview';
     const PREVIEW_LIFETIME_IN_SECONDS = 0;
@@ -64,21 +67,52 @@ class Slide extends Model
     }
 
     /**
-     * Extract the provided slide to a randomly generated public path
+     * Extract the provided slide to a randomly generated path
+     */
+    public function extractToPath(string $targetPath, $disk = self::STORAGE_DISK)
+    {
+        // Copy the file to the disk
+        $source = Storage::disk(self::STORAGE_DISK)->readStream($this->path);
+        Storage::disk($disk)->writeStream($targetPath, $source);
+
+        return $targetPath;
+    }
+
+    /**
+     *
+     */
+    public function getKnownPath(): string
+    {
+        $directory = self::LIVE_FILE_DIRECTORY;
+
+        return $directory . '/' . $this->id . '.html';
+    }
+
+    /**
+     * Extract the provided slide to a known path and leave it there
+     */
+    public function extractLiveToPublic()
+    {
+        return $this->extractToPath($this->getKnownPath(), self::LIVE_STORAGE_DISK);
+    }
+
+    /**
+     * Extract the provided slide to a randomly generated public path and add a clean up job
      */
     public function extractPreviewToPublic()
     {
+        $disk = self::PREVIEW_STORAGE_DISK;
+        $directory = self::PREVIEW_FILE_DIRECTORY;
+
         do
         {
             $randomString = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 20);
-            $publicPath = self::PREVIEW_FILE_DIRECTORY . '/' . $randomString . '.html';
-        } while (Storage::disk('public')->exists($publicPath));
+            $path = $directory . '/' . $randomString . '.html';
+        } while (Storage::disk($disk)->exists($path));
 
-        // Copy the file to the public disk
-        $source = Storage::disk(self::STORAGE_DISK)->readStream($this->path);
-        Storage::disk(self::PREVIEW_STORAGE_DISK)->writeStream($publicPath, $source);
+        $publicPath = $this->extractToPath($path, $disk);
 
-        $cleanupJob = RemovePreviewSlide::dispatch(self::PREVIEW_STORAGE_DISK, $publicPath);
+        $cleanupJob = RemovePreviewSlide::dispatch($disk, $publicPath);
 
         if (self::PREVIEW_LIFETIME_IN_SECONDS > 0) {
             $cleanupJob->delay(now()->addSeconds(self::PREVIEW_LIFETIME_IN_SECONDS));
@@ -88,13 +122,24 @@ class Slide extends Model
     }
 
     /**
-     * Delete the file associated with this slide
+     * Delete the file associated with this slide (that is not the preview file, nor the live file)
      */
-    public function deleteFile($originalPath = null)
+    public function deleteSourceFile($originalPath = null)
     {
         $path = $originalPath ?? $this->path;
 
         Storage::disk(self::STORAGE_DISK)
+            ->delete($path);
+    }
+
+    /**
+     * Delete the live file associated with this slide
+     */
+    public function deleteLiveFile()
+    {
+        $path = $this->getKnownPath();
+
+        Storage::disk(self::LIVE_STORAGE_DISK)
             ->delete($path);
     }
 

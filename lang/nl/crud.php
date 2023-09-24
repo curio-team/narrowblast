@@ -29,6 +29,10 @@ return [
         'change_credits' => 'credits veranderen',
     ],
 
+    'screens' => [
+        'view' => 'Bekijk',
+    ],
+
     'slides' => [
         'title' => 'titel',
         'approved' => 'goedgekeurd',

@@ -14,9 +14,7 @@ class DeleteOutdatedSlideFiles
      * @return void
      */
     public function __construct()
-    {
-        //
-    }
+    { }
 
     /**
      * Handle the event.
@@ -33,7 +31,7 @@ class DeleteOutdatedSlideFiles
         $slideFileChanged = $slide->getOriginal('path') !== $slide->path;
 
         if (!$slideExists || $slideFileChanged) {
-            $slide->deleteFile($slide->getOriginal('path'));
+            $slide->deleteSourceFile($slide->getOriginal('path'));
         }
     }
 }

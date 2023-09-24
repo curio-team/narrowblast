@@ -29,11 +29,11 @@ class SlideController extends Controller
      */
     public function slideShow(Screen $screen)
     {
-        $slides = $screen->slides;
+        $screenSlides = $screen->screenSlides;
 
-        return view('app.slides.slideshow', [
+        return view('app.slides.slide-show', [
             'screen' => $screen,
-            'slides' => $slides,
+            'screenSlides' => $screenSlides,
         ]);
     }
 

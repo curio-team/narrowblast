@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Events\ScreenSlideCreated;
+use App\Events\ScreenSlideDeleted;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -28,6 +30,16 @@ class ScreenSlide extends Model
     protected $casts = [
         'displays_from' => 'datetime',
         'displays_until' => 'datetime',
+    ];
+
+    /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'deleted' => ScreenSlideDeleted::class,
+        'created' => ScreenSlideCreated::class,
     ];
 
     /**

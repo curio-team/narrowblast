@@ -72,8 +72,21 @@ class ShopItem extends Model
      */
     function callShopItemMethod(string $method, ShopItemUser $shopItemUser, ...$arguments)
     {
+        // Check if we're already in a transaction, if not, start one
+        $inTransaction = \DB::transactionLevel() > 0;
+
+        if (!$inTransaction) {
+            \DB::beginTransaction();
+        }
+
         $shopItemClass = $this->getShopItemClass();
-        return call_user_func([$shopItemClass, $method], $this, $shopItemUser, ...$arguments);
+        $result = call_user_func([$shopItemClass, $method], $this, $shopItemUser, ...$arguments);
+
+        if (!$inTransaction) {
+            \DB::commit();
+        }
+
+        return $result;
     }
 
     /**

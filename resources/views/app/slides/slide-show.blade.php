@@ -1,8 +1,8 @@
 <x-common-layout>
     <div class="reveal">
         <div class="slides">
-            @foreach ($activeSlides as $activeSlide)
-                <x-slide :slide="$activeSlide->slide" />
+            @foreach ($screenSlides as $screenSlide)
+                <x-slide :slide="$screenSlide->slide" :publicPath="asset('storage/' . $screenSlide->slide->getKnownPath())" />
             @endforeach
         </div>
     </div>
