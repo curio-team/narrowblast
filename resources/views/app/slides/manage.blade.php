@@ -16,19 +16,15 @@
         </x-card>
 
         <x-headings.area>
-            @lang('app.slides_pending')
+            @lang('app.slide_upload')
         </x-headings.area>
 
         <x-card>
-            @livewire('list-slides', ['isApproved' => false])
+            <x-stack-layout>
+                @livewire('upload-slide')
+            </x-stack-layout>
         </x-card>
 
-        <x-headings.area>
-            @lang('app.slides_approved')
-        </x-headings.area>
-
-        <x-card>
-            @livewire('list-slides', ['isApproved' => true])
-        </x-card>
+        @livewire('slide-switcher')
     </x-stack-layout>
 </x-app-layout>

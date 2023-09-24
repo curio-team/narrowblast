@@ -50,12 +50,18 @@ class SlideResource extends Resource
                         return $record?->approved_at !== null;
                     })
                     // Frustratingly doesn't work on create, so lets just hide the approved button for now
-                    ->hidden(function (Get $get):bool {
-                        return $get('id') === null;
+                    ->hidden(function (Get $get, ?Slide $record):bool {
+                        return $record?->finalized_at === null || $get('id') === null;
                     })
                     ->dehydrateStateUsing(function (?Slide $record, ?bool $state) {
                         $record->approved_at = $state ? now() : null;
                         $record->approver_id = $state ? auth()->id() : null;
+                    }),
+
+                Forms\Components\Placeholder::make('still_a_wip')
+                    ->label(ucfirst(__('crud.slides.still_a_wip')))
+                    ->visible(function (?Slide $record):bool {
+                        return $record?->finalized_at === null;
                     }),
 
                 // This code is disabled because:
@@ -98,11 +104,24 @@ class SlideResource extends Resource
                     ->label(ucfirst(__('validation.attributes.username')))
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('finalized_at')
+                    ->label(ucfirst(__('crud.slides.pending_approval')))
+                    ->getStateUsing(function (Slide $record) {
+                        return $record->finalized_at !== null;
+                    })
+                    ->formatStateUsing(function (bool $state) {
+                        return $state ? 'Yes' : 'No';
+                    })
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\ToggleColumn::make('approved')
                     ->label(ucfirst(__('crud.slides.approved')))
                     ->sortable()
                     ->state(function(Slide $record) {
                         return $record->approved_at !== null;
+                    })
+                    ->disabled(function(Slide $record) {
+                        return $record->finalized_at === null;
                     })
                     ->updateStateUsing(function(Slide $record, bool $state) {
                         $record->approved_at = $state ? now() : null;

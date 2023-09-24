@@ -12,8 +12,7 @@
     $checked = !! $checked
 @endphp
 
-<div class="form-check">
-
+<div class="flex flex-row gap-2 items-center">
     {{-- Adds a hidden default value to be send if checked is false --}}
     @if($addHiddenValue)
     <input type="hidden" id="{{  $id ?? $name }}-hidden" name="{{ $name }}" value="{{ $hiddenValue }}">
@@ -25,11 +24,11 @@
         name="{{ $name }}"
         value="{{ $value ?? 1 }}"
         {{ $checked ? 'checked' : '' }}
-        {{ $attributes->merge(['class' => 'form-check-input']) }}
+        {{ $attributes->merge(['class' => '']) }}
     >
 
     @if($label ?? null)
-        <label class="form-check-label" for="{{ $id ?? $name }}">
+        <label class="" for="{{ $id ?? $name }}">
             {{ $label }}
         </label>
     @endif

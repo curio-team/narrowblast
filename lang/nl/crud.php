@@ -37,12 +37,20 @@ return [
         'title' => 'titel',
         'approved' => 'goedgekeurd',
         'preview' => 'voorbeeld',
+
+        'still_a_wip' => 'Deze slide is nog in ontwikkeling en kan nog niet worden goedgekeurd.',
+        'ask_for_approval' => 'Vraag goedkeuring',
+        'revoke_ask_for_approval' => 'Verzoek om goedkeuring intrekken',
+        'pending_approval' => 'in afwachting van goedkeuring',
+
         'displays_from' => 'zichtbaar vanaf',
         'displays_until' => 'zichtbaar tot',
         'activator' => 'geactiveerd door',
         'slides_count' => 'Aantal slides',
+
         'display_forever' => 'Voor altijd weergeven',
         'slide_duration' => 'Specifieke slide duur',
+
         'slide_is_active' => 'Jouw slide \':slide\' is actief en wordt weergegeven op de schermen.',
         'slide_opwaarderen_gebruikt' => 'Er is al een slide opgewaardeerd met JavaScript!',
     ],

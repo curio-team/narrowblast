@@ -21,9 +21,15 @@ return new class extends Migration {
 
             $table->json('data')->nullable();
 
-            // Which teacher  this slide and when
+            $table->dateTime('finalized_at')->nullable();
+
+            // Which teacher approved this slide and when
             $table->string('approver_id')->nullable()->references('id')->on('users');
             $table->dateTime('approved_at')->nullable();
+
+            $table->string('rejecter_id')->nullable()->references('id')->on('users');
+            $table->dateTime('rejected_at')->nullable();
+            $table->string('rejection_reason')->nullable();
 
             $table
                 ->foreign('approver_id')

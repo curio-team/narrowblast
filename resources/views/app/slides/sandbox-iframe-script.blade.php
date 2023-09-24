@@ -13,10 +13,13 @@
 
                     if(hasJavascriptPowerup) {
                         iframe.setAttribute('sandbox', 'allow-scripts');
-                        iframe.dataset.narrowBlastInit = 'yes';
-                        iframe.src = publicPath;
-                        console.log(`🚀 NarrowBlast: iframe (${publicPath}) allowing scripts`, iframe);
+                    } else {
+                        iframe.setAttribute('sandbox', '');
                     }
+
+                    iframe.dataset.narrowBlastInit = 'yes';
+                    iframe.src = publicPath;
+                    console.log(`🚀 NarrowBlast: iframe (${publicPath}) allowing scripts`, iframe);
                 }
             });
         }).observe(iframe, {
