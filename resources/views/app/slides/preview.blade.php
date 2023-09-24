@@ -1,7 +1,8 @@
 <x-common-layout>
     <div class="reveal">
         <div class="slides">
-            <x-slide :slide="$slide" :publicPath="$publicPath" />
+            <section data-background-iframe="{{ $publicPath }}">
+            </section>
         </div>
     </div>
 

@@ -58,25 +58,28 @@ class SlideResource extends Resource
                         $record->approver_id = $state ? auth()->id() : null;
                     }),
 
-                // Allows adding to screens immediately
-                Forms\Components\Repeater::make('screenSlides')
-                    ->relationship()
-                    ->columnSpanFull()
-                    ->schema([
-                        Forms\Components\Select::make('screen_id')
-                            ->relationship('screen', 'name')
-                            ->searchable(['name'])
-                            ->preload()
-                            ->required(),
-                    ])
-                    ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
-                        $data['activator_id'] = auth()->id();
-
-                        return $data;
-                    })
-                    ->hidden(function (Get $get):bool {
-                        return $get('approved_at') == false;
-                    }),
+                // This code is disabled because:
+                // A. It had a bug where the slides would keep reappearing (visually, livewire problem)
+                // B. Besides making screenslides, it should also add some data to the shopitemuser (see CustomSlideTime.php)
+                //// Allows adding to screens immediately
+                //// Forms\Components\Repeater::make('screenSlides')
+                ////     ->relationship()
+                ////     ->columnSpanFull()
+                ////     ->schema([
+                ////         Forms\Components\Select::make('screen_id')
+                ////             ->relationship('screen', 'name')
+                ////             ->searchable(['name'])
+                ////             ->preload()
+                ////             ->required(),
+                ////     ])
+                ////     ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
+                ////         $data['activator_id'] = auth()->id();
+//
+                ////         return $data;
+                ////     })
+                ////     ->hidden(function (Get $get):bool {
+                ////         return $get('approved_at') == false;
+                ////     }),
             ]);
     }
 

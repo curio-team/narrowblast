@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Screen;
+use App\Models\ShopItemUser;
 use App\Models\Slide;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -29,11 +31,39 @@ class SlideController extends Controller
      */
     public function slideShow(Screen $screen)
     {
-        $screenSlides = $screen->screenSlides;
-
         return view('app.slides.slide-show', [
             'screen' => $screen,
-            'screenSlides' => $screenSlides,
+        ]);
+    }
+
+    /**
+     * API endpoint to get updates on active slides and to call the respective callShopItemMethod on the shop items
+     */
+    public function slideShowTick(Request $request, Screen $screen)
+    {
+        $screenSlides = $screen->screenSlides;
+        $slidePublicPaths = [];
+        $shopItemUsers = ShopItemUser::where(function(Builder $query) use ($screenSlides) {
+            $query->whereIn('data->screen_slide_id', $screenSlides->pluck('id'));
+        })->get();
+
+        foreach ($shopItemUsers as $shopItemUser) {
+            // Get the associated screen slide for this shop item user
+            $screenSlide = $screenSlides->firstWhere('id', $shopItemUser->data['screen_slide_id']);
+
+            if ($screenSlide) {
+                // Call the onTick method on the shopItem
+                $shopItem = $shopItemUser->shopItem;
+                $result = $shopItem->callShopItemMethod('onTick', $shopItemUser, $screenSlide);
+
+                if ($result !== false) {
+                    $slidePublicPaths[] = asset('storage/'.$screenSlide->slide->getKnownPath());
+                }
+            }
+        }
+
+        return response()->json([
+            'public_paths' => $slidePublicPaths,
         ]);
     }
 

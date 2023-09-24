@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class ShopItemUser extends Pivot
@@ -13,7 +14,7 @@ class ShopItemUser extends Pivot
     ];
 
     protected $casts = [
-        'data' => 'array',
+        'data' => AsArrayObject::class,
     ];
 
     public function user()

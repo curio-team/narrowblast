@@ -32,94 +32,97 @@ class ScreenResource extends Resource
                     ->maxLength(255)
                     ->autofocus()
                     ->required(),
-                Forms\Components\Repeater::make('slides')
-                    ->relationship()
-                    ->orderColumn('slide_order')
-                    ->schema(function(Screen $screen) {
-                        $defaultUntil = now()->addDays(7);
-                        return [
-                            Forms\Components\Select::make('slide_id')
-                                ->relationship('slide', 'title', function (Builder $query, ?ScreenSlide $record) use($screen) {
-                                    $alreadySelectedExceptSelf = $screen->screenSlides->pluck('slide_id');
 
-                                    if($record !== null) {
-                                        $alreadySelectedExceptSelf = $alreadySelectedExceptSelf->filter(fn ($id) => $id !== $record->slide_id);
-                                    }
+                // This code is disabled because:
+                // Besides making screenslides, it should also add some data to the shopitemuser (see CustomSlideTime.php)
+                //// Forms\Components\Repeater::make('slides')
+                ////     ->relationship()
+                ////     ->orderColumn('slide_order')
+                ////     ->schema(function(Screen $screen) {
+                ////         $defaultUntil = now()->addDays(7);
+                ////         return [
+                ////             Forms\Components\Select::make('slide_id')
+                ////                 ->relationship('slide', 'title', function (Builder $query, ?ScreenSlide $record) use($screen) {
+                ////                     $alreadySelectedExceptSelf = $screen->screenSlides->pluck('slide_id');
 
-                                    return $query->onlyApproved()
-                                        ->whereNotIn('id', $alreadySelectedExceptSelf);
-                                })
-                                ->searchable(['title'])
-                                ->preload()
-                                ->required(),
+                ////                     if($record !== null) {
+                ////                         $alreadySelectedExceptSelf = $alreadySelectedExceptSelf->filter(fn ($id) => $id !== $record->slide_id);
+                ////                     }
 
-                            Forms\Components\DateTimePicker::make('displays_from')
-                                ->label(ucfirst(__('crud.slides.displays_from')))
-                                ->default(now())
-                                ->minDate(function (?ScreenSlide $record) {
-                                    if ($record?->isClean('displays_from')) {
-                                        return null;
-                                    }
+                ////                     return $query->onlyApproved()
+                ////                         ->whereNotIn('id', $alreadySelectedExceptSelf);
+                ////                 })
+                ////                 ->searchable(['title'])
+                ////                 ->preload()
+                ////                 ->required(),
 
-                                    return now()->subMinute(5);
-                                })
-                                ->displayFormat(DateHelpers::getDateFormat())
-                                ->seconds(false)
-                                ->native(false)
-                                ->closeOnDateSelection()
-                                ->required(),
+                ////             Forms\Components\DateTimePicker::make('displays_from')
+                ////                 ->label(ucfirst(__('crud.slides.displays_from')))
+                ////                 ->default(now())
+                ////                 ->minDate(function (?ScreenSlide $record) {
+                ////                     if ($record?->isClean('displays_from')) {
+                ////                         return null;
+                ////                     }
 
-                            Forms\Components\Checkbox::make('display_forever')
-                                ->label(ucfirst(__('crud.slides.display_forever')))
-                                ->live()
-                                ->formatStateUsing(function (?ScreenSlide $record, ?bool $state): ?bool {
-                                    return $record?->displays_until === null;
-                                })
-                                ->afterStateUpdated(function (Set $set, ?bool $state) use($defaultUntil) {
-                                    $set('displays_until', $state ? null : $defaultUntil);
-                                })
-                                ->default(false),
+                ////                     return now()->subMinute(5);
+                ////                 })
+                ////                 ->displayFormat(DateHelpers::getDateFormat())
+                ////                 ->seconds(false)
+                ////                 ->native(false)
+                ////                 ->closeOnDateSelection()
+                ////                 ->required(),
 
-                            Forms\Components\DateTimePicker::make('displays_until')
-                                ->label(ucfirst(__('crud.slides.displays_until')))
-                                ->live()
-                                ->default($defaultUntil)
-                                ->minDate(function (?ScreenSlide $record) {
-                                    if ($record?->isClean('displays_until')) {
-                                        return null;
-                                    }
+                ////             Forms\Components\Checkbox::make('display_forever')
+                ////                 ->label(ucfirst(__('crud.slides.display_forever')))
+                ////                 ->live()
+                ////                 ->formatStateUsing(function (?ScreenSlide $record, ?bool $state): ?bool {
+                ////                     return $record?->displays_until === null;
+                ////                 })
+                ////                 ->afterStateUpdated(function (Set $set, ?bool $state) use($defaultUntil) {
+                ////                     $set('displays_until', $state ? null : $defaultUntil);
+                ////                 })
+                ////                 ->default(false),
 
-                                    return now();
-                                })
-                                ->afterStateUpdated(function (Set $set, ?string $state) {
-                                    if ($state) {
-                                        $set('display_forever', false);
-                                    }
-                                })
-                                ->displayFormat(DateHelpers::getDateFormat())
-                                ->seconds(false)
-                                ->native(false)
-                                ->closeOnDateSelection()
-                                ->required(fn (Get $get): bool => $get('display_forever') === false),
-                                //->visible(fn (Get $get): bool => $get('display_forever') === false), // With this line uncommented the $set wont save :/ (it should.......)
+                ////             Forms\Components\DateTimePicker::make('displays_until')
+                ////                 ->label(ucfirst(__('crud.slides.displays_until')))
+                ////                 ->live()
+                ////                 ->default($defaultUntil)
+                ////                 ->minDate(function (?ScreenSlide $record) {
+                ////                     if ($record?->isClean('displays_until')) {
+                ////                         return null;
+                ////                     }
 
-                            Forms\Components\TextInput::make('slide_duration')
-                                ->label(ucfirst(__('crud.slides.slide_duration')))
-                                ->numeric()
-                                ->default(10)
-                                ->minValue(1)
-                                ->maxValue(60),
-                        ];
-                    })
-                    ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
-                        $data['activator_id'] = auth()->id();
+                ////                     return now();
+                ////                 })
+                ////                 ->afterStateUpdated(function (Set $set, ?string $state) {
+                ////                     if ($state) {
+                ////                         $set('display_forever', false);
+                ////                     }
+                ////                 })
+                ////                 ->displayFormat(DateHelpers::getDateFormat())
+                ////                 ->seconds(false)
+                ////                 ->native(false)
+                ////                 ->closeOnDateSelection()
+                ////                 ->required(fn (Get $get): bool => $get('display_forever') === false),
+                ////                 //->visible(fn (Get $get): bool => $get('display_forever') === false), // With this line uncommented the $set wont save :/ (it should.......)
 
-                        return $data;
-                    })
-                    ->columns([
-                        'lg' => 5,
-                        'md' => 2,
-                    ]),
+                ////             Forms\Components\TextInput::make('slide_duration')
+                ////                 ->label(ucfirst(__('crud.slides.slide_duration')))
+                ////                 ->numeric()
+                ////                 ->default(10)
+                ////                 ->minValue(1)
+                ////                 ->maxValue(60),
+                ////         ];
+                ////     })
+                ////     ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
+                ////         $data['activator_id'] = auth()->id();
+
+                ////         return $data;
+                ////     })
+                ////     ->columns([
+                ////         'lg' => 5,
+                ////         'md' => 2,
+                ////     ]),
             ])
             ->columns(1);
     }

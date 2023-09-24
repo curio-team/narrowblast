@@ -5,7 +5,7 @@ import Reveal from 'reveal.js';
 import Markdown from 'reveal.js/plugin/markdown/markdown.esm.js';
 
 if (document.querySelector('.reveal')) {
-    let deck = new Reveal({
+    window.RevealDeck = new Reveal({
         plugins: [Markdown],
 
         autoSlide: 2000,
@@ -16,6 +16,5 @@ if (document.querySelector('.reveal')) {
         controls: false,
         // progress: false,
     });
-
-    deck.initialize();
+    window.RevealDeck.initialize();
 }

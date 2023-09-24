@@ -39,4 +39,14 @@ interface ShopItemInterface
      *      return redirect()->back()->withErrors([...]);
      */
     public static function onUse(ShopItem $shopItem, ShopItemUser $shopItemUser, ...$arguments): null|\Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse;
+
+    /**
+     * Called periodically while the product is being used.
+     *
+     * For time restricted items this can be used to check if the item has expired.
+     * Return false to deactivate the item.
+     *
+     * The ShopItemUser will NOT be saved after this method is called, so you must save it yourself.
+     */
+    public static function onTick(ShopItem $shopItem, ShopItemUser $shopItemUser, ...$arguments): bool;
 }

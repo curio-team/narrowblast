@@ -39,6 +39,7 @@ Route::prefix('/')
     Route::post('/slides/{slide}/deactivate', [SlideController::class, 'deactivate'])->name('slides.deactivate')->middleware('throttle:10,1');
 });
 
+Route::post('/screen/{screen}/tick', [SlideController::class, 'slideShowTick'])->name('slides.slideShowTick');
 Route::get('/screen/{screen}', [SlideController::class, 'slideShow'])->name('slides.slideShow');
 
 Route::get('/', function () {

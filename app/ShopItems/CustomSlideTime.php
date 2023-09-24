@@ -17,13 +17,11 @@ class CustomSlideTime implements ShopItemInterface
      */
     public static function onPurchase(ShopItem $shopItem, ShopItemUser $shopItemUser): void
     {
-        $shopItemUser->data = array_merge($shopItemUser->data, [
-            'time_total_in_seconds' => match ($shopItem->unique_id) {
-                'slide_7d' => 7 * 24 * 60 * 60,
-                'slide_14d' => 14 * 24 * 60 * 60,
-            },
-            'time_used_in_seconds' => 0,
-        ]);
+        $shopItemUser->data['time_total_in_seconds'] = match ($shopItem->unique_id) {
+            'slide_7d' => 7 * 24 * 60 * 60,
+            'slide_14d' => 14 * 24 * 60 * 60,
+        };
+        $shopItemUser->data['time_used_in_seconds'] = 0;
     }
 
     /**
@@ -35,7 +33,7 @@ class CustomSlideTime implements ShopItemInterface
         $timeUsedInHours = $shopItemUser->data['time_used_in_seconds'] / 60 / 60;
         $activeSlideId = $shopItemUser->data['active_slide'] ?? null;
         $activeSlide = $activeSlideId ? $shopItemUser->user->slides()->find($activeSlideId) : null;
-        $selectableSlides = auth()->user()->approvedSlides()->withCount('screens')->where('screens_count', 0);
+        $selectableSlides = auth()->user()->approvedSlides()->withCount('screens')->having('screens_count', '==', 0)->get();
 
         return view('app.shop.items.custom-slide-time', compact('timeUsedInHours', 'timeTotalInHours', 'activeSlide', 'shopItemUser', 'selectableSlides'))->render();
     }
@@ -77,12 +75,9 @@ class CustomSlideTime implements ShopItemInterface
 
             $screenSlide->save();
 
-            // Merge the active slide into the data
-            $shopItemUser->data = array_merge($shopItemUser->data, [
-                'active_slide' => $slide->id,
-                'screen_slide_id' => $screenSlide->id,
-                'active_slide_start_time' => time(),
-            ]);
+            $shopItemUser->data['active_slide'] = $slide->id;
+            $shopItemUser->data['screen_slide_id'] = $screenSlide->id;
+            $shopItemUser->data['active_slide_start_time'] = time();
         } else {
             // Check that the user is using the correct slide
             if ($shopItemUser->data['active_slide'] !== $slide->id) {
@@ -91,14 +86,15 @@ class CustomSlideTime implements ShopItemInterface
                 ]);
             }
 
-            // Remove the active slide from the data
-            $shopItemUser->data = array_merge($shopItemUser->data, [
-                'active_slide' => null,
-                'active_slide_start_time' => null,
-            ]);
+            $screenSlideId = $shopItemUser->data['screen_slide_id'];
 
-            if (isset($shopItemUser->data['screen_slide_id'])) {
-                $screenSlide = ScreenSlide::find($shopItemUser->data['screen_slide_id']);
+            // Remove the active slide from the data
+            $shopItemUser->data['active_slide'] = null;
+            $shopItemUser->data['active_slide_start_time'] = null;
+            $shopItemUser->data['screen_slide_id'] = null;
+
+            if (isset($screenSlideId)) {
+                $screenSlide = ScreenSlide::find($screenSlideId);
 
                 if($screenSlide) {
                     $screenSlide->delete();
@@ -107,5 +103,40 @@ class CustomSlideTime implements ShopItemInterface
         }
 
         return null;
+    }
+
+    /**
+     * Called periodically while the product is being used.
+     *
+     * We use this to check if the item has expired.
+     */
+    public static function onTick(ShopItem $shopItem, ShopItemUser $shopItemUser, ...$arguments): bool
+    {
+        // Guard against an invalid screen slide being passed
+        $screenSlide = $arguments[0];
+
+        if (!$screenSlide || !is_object($screenSlide) || get_class($screenSlide) !== ScreenSlide::class) {
+            throw new \Exception('No screen slide passed to CustomSlideTime::onTick! Please call a developer.');
+        }
+
+        // Use active_slide_start_time to calculate how much time is left
+        $timeUsedSinceStart = time() - $shopItemUser->data['active_slide_start_time'];
+        $timeLeft = $shopItemUser->data['time_total_in_seconds'] - $shopItemUser->data['time_used_in_seconds'] - $timeUsedSinceStart;
+
+        if ($timeLeft <= 0) {
+            $shopItemUser->data['active_slide'] = null;
+            $shopItemUser->data['screen_slide_id'] = null;
+            $shopItemUser->data['active_slide_start_time'] = null;
+
+            // Update the time used
+            $shopItemUser->data['time_used_in_seconds'] = $shopItemUser->data['time_used_in_seconds'] + $timeUsedSinceStart;
+
+            $screenSlide->delete();
+            $shopItemUser->save();
+
+            return false;
+        }
+
+        return true;
     }
 }

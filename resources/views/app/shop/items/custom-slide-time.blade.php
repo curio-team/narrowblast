@@ -45,7 +45,7 @@
         <div class="flex mb-2 items-center justify-between">
             <div>
                 <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200">
-                    {{ $timeUsedInHours }} / {{ $timeTotalInHours }} uur gebruikt
+                    {{ floor($timeUsedInHours) }} / {{ round($timeTotalInHours) }} uur gebruikt
                 </span>
             </div>
             <div class="text-right">
