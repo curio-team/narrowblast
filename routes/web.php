@@ -30,13 +30,16 @@ Route::prefix('/')
     ->middleware('auth')
     ->group(function () {
 
-    Route::get('/admin/slide-preview/{slide}', [SlideController::class, 'preview'])->name('slides.preview')->middleware('auth.teacher');
-
     Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
     Route::get('/inventory', [ShopController::class, 'inventory'])->name('shop.inventory');
+    Route::get('/slides', [SlideController::class, 'manage'])->name('slides.manage');
+
+    Route::get('/slides/{slide}/tmp-preview/', [SlideController::class, 'preview'])->name('slides.preview')->middleware('throttle:10,1');
+    Route::post('/slides/activate-new', [SlideController::class, 'activateNew'])->name('slides.activateNew')->middleware('throttle:10,1');
+    Route::post('/slides/{slide}/deactivate', [SlideController::class, 'deactivate'])->name('slides.deactivate')->middleware('throttle:10,1');
 });
 
-Route::get('/screen', [SlideController::class, 'slideShow'])->name('slides.slideShow');
+Route::get('/screen/{screen}', [SlideController::class, 'slideShow'])->name('slides.slideShow');
 
 Route::get('/', function () {
     return view('app.home');

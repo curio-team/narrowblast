@@ -34,5 +34,7 @@ return [
         'screen_count' => 'Aantal schermen',
         'display_forever' => 'Voor altijd weergeven',
         'slide_duration' => 'Custom slide duration',
+        'deactivate' => 'Deactiveer',
+        'choose_active' => 'Kies & Activeer Slide',
     ],
 ];

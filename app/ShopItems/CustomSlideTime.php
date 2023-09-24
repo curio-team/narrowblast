@@ -4,6 +4,7 @@ namespace App\ShopItems;
 
 use App\Models\ShopItem;
 use App\Models\ShopItemUser;
+use App\Models\Slide;
 
 #[ForShopItem('slide_7d')]
 #[ForShopItem('slide_14d')]
@@ -30,7 +31,57 @@ class CustomSlideTime implements ShopItemInterface
     {
         $timeTotalInHours = $shopItemUser->data['time_total_in_seconds'] / 60 / 60;
         $timeUsedInHours = $shopItemUser->data['time_used_in_seconds'] / 60 / 60;
+        $activeSlideId = $shopItemUser->data['active_slide'] ?? null;
+        $activeSlide = $activeSlideId ? $shopItemUser->user->slides()->find($activeSlideId) : null;
 
-        return view('app.shop.items.custom-slide-time', compact('timeUsedInHours', 'timeTotalInHours'))->render();
+        return view('app.shop.items.custom-slide-time', compact('timeUsedInHours', 'timeTotalInHours', 'activeSlide', 'shopItemUser'))->render();
+    }
+
+    /**
+     * Sets the start time to now when a user uses this item.
+     */
+    public static function onUse(ShopItem $shopItem, ShopItemUser $shopItemUser, ...$arguments): null|\Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
+    {
+        // Guard against an invalid slide being passed
+        $slide = $arguments[0];
+        $isActivate = $arguments[1];
+
+        if (!$slide || !is_object($slide) || get_class($slide) !== Slide::class) {
+            throw new \Exception('No slide id passed to CustomSlideTime::onUse! Please call a developer.');
+        }
+
+        if (!is_bool($isActivate)) {
+            throw new \Exception('No isActivate bool passed to CustomSlideTime::onUse! Please call a developer.');
+        }
+
+        if ($isActivate) {
+            $timeLeft = $shopItemUser->data['time_total_in_seconds'] - $shopItemUser->data['time_used_in_seconds'];
+            if ($timeLeft <= 0) {
+                return redirect()->back()->withErrors([
+                    'shop_item_user_id' => __('You have no time left on this item'),
+                ]);
+            }
+
+            // Merge the active slide into the data
+            $shopItemUser->data = array_merge($shopItemUser->data, [
+                'active_slide' => $slide->id,
+                'active_slide_start_time' => time(),
+            ]);
+        } else {
+            // Check that the user is using the correct slide
+            if ($shopItemUser->data['active_slide'] !== $slide->id) {
+                return redirect()->back()->withErrors([
+                    'shop_item_user_id' => __('You are not using this slide with this item'),
+                ]);
+            }
+
+            // Remove the active slide from the data
+            $shopItemUser->data = array_merge($shopItemUser->data, [
+                'active_slide' => null,
+                'active_slide_start_time' => null,
+            ]);
+        }
+
+        return null;
     }
 }

@@ -60,6 +60,9 @@
                 <x-buttons.link href="{{ route('shop.inventory') }}" icon="archive-box">
                     @lang('app.inventory')
                 </x-buttons.link>
+                <x-buttons.link href="{{ route('slides.manage') }}" icon="presentation-chart-bar">
+                    @lang('app.slides_manage')
+                </x-buttons.link>
                 @if(Auth::user()->isSuperAdmin())
                 <x-buttons.link href="{{ route('filament.admin.pages.dashboard') }}"
                     icon="lock-closed"

@@ -26,4 +26,17 @@ interface ShopItemInterface
      * - If it is a pet, show the pet's name
      */
     public static function showUserData(ShopItem $shopItem, ShopItemUser $shopItemUser): string;
+
+    /**
+     * Called when a user uses this item.
+     *
+     * Use this to update any data that is required for the item. For example:
+     * - If it is a consumable, deduct the amount of uses from the user
+     * - If it is time restricted, set the start time to now (so we can calculate how much time is left later)
+     *
+     * The ShopItemUser will be saved when this method returns null, so no need to save it yourself.
+     * Return a redirect response to redirect the user back with validation errors, e.g:
+     *      return redirect()->back()->withErrors([...]);
+     */
+    public static function onUse(ShopItem $shopItem, ShopItemUser $shopItemUser, ...$arguments): null|\Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse;
 }

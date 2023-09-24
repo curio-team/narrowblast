@@ -68,19 +68,27 @@ class ShopItem extends Model
     }
 
     /**
+     * Calls the given method on the shop item class that matches the unique_id
+     */
+    function callShopItemMethod(string $method, ShopItemUser $shopItemUser, ...$arguments)
+    {
+        $shopItemClass = $this->getShopItemClass();
+        return call_user_func([$shopItemClass, $method], $this, $shopItemUser, ...$arguments);
+    }
+
+    /**
      * Purchases an item for the specified user.
      * Does not deduct credits, this should be done before calling this method and in a transaction with this method.
      */
     function purchaseFor(User $user): void
     {
-        $shopItemClass = $this->getShopItemClass();
         $shopItemUser = new ShopItemUser();
         $shopItemUser->user_id = $user->id;
         $shopItemUser->shop_item_id = $this->id;
         $shopItemUser->cost_in_credits = $this->cost_in_credits;
         $shopItemUser->data = [];
 
-        call_user_func([$shopItemClass, 'onPurchase'], $this, $shopItemUser);
+        $this->callShopItemMethod('onPurchase', $shopItemUser);
 
         $shopItemUser->save();
     }
@@ -90,8 +98,7 @@ class ShopItem extends Model
      */
     function showUserData(ShopItemUser $shopItemUser)
     {
-        $shopItemClass = $this->getShopItemClass();
-        return call_user_func([$shopItemClass, 'showUserData'], $this, $shopItemUser);
+        return $this->callShopItemMethod('showUserData', $shopItemUser);
     }
 
     /**
@@ -100,6 +107,9 @@ class ShopItem extends Model
      *
      */
 
+    /**
+     * The pivot for this item and the user that owns it
+     */
     public function shopItemUsers() {
         return $this->hasMany(ShopItemUser::class);
     }

@@ -7,10 +7,10 @@
         <x-card>
             <x-stack-layout>
                 <p>
-                    Hier kun je zien welke producten je hebt gekocht en hoeveel je er nog hebt.
+                    Hier kun je zien welke producten je hebt gekocht en hoeveel tijd of gebruik van het product nog over is.
                 </p>
                 <p>
-                    Daarnaast kun je onderaan de pagina jouw gemaakte slides bekijken, en zien of ze al zijn goedgekeurd. Als ze zijn goedgekeurd worden ze op de schermen geplaatst.
+                    Om slides actief te zetten moet je eerst een slide uploaden en laten goedkeuren. Ga daarvoor naar je <x-buttons.link href="{{ route('slides.manage') }}" icon="presentation-chart-bar">@lang('app.slides_manage')</x-buttons.link> pagina.
                 </p>
             </x-stack-layout>
         </x-card>
@@ -19,7 +19,6 @@
             @lang('app.inventory_items')
         </x-headings.area>
 
-        {{-- tailwindcss grid with 3 columns on lg, 2 on md and 1 on mobiile(default) --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             @foreach ($items as $item)
                 <x-card class="flex flex-col justify-between">
