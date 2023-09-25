@@ -16,8 +16,8 @@
                           height="32px" />
         </button>
 
-        <div x-cloak class="md:!flex bg-white bottom-0 top-0 right-0 flex fixed md:static p-4 md:p-0 shadow-md md:shadow-none gap-4 flex-col md:flex-row"
-            :class="{ 'hidden': !openSidebar }">
+        <div x-cloak class="md:flex w-full sm:min-w-[360px] z-50 items-center bg-white bottom-0 top-0 right-0 flex fixed md:static p-4 md:p-0 shadow-md md:shadow-none gap-4 flex-col md:flex-row"
+            :class="{ '!hidden': !openSidebar }">
             <button class="block md:hidden self-end"
                     type="button"
                     @click="openSidebar = false"
@@ -33,19 +33,38 @@
                         <x-buttons.link href="{{ route('register') }}">{{ __('Register') }}</x-buttons.link>
                     @endif
                 @else
-                    <x-buttons.link
-                        target="_blank"
-                        href="{{ url('https://login.curio.codes') }}">
-                        {{ Auth::user()->name }} <span class="caret"></span>
-                    </x-buttons.link>
+                    <x-stack-layout class="items-center mr-4">
+                        <x-buttons.link
+                            target="_blank"
+                            href="{{ url('https://login.curio.codes') }}">
+                            {{ Auth::user()->name }} <span class="caret"></span>
+                        </x-buttons.link>
 
-                    <form action="{{ route('logout') }}"
-                        method="POST">
-                        @csrf
-                        <x-buttons.primary submit>
-                            {{ __('Logout') }}
-                        </x-buttons.primary>
-                    </form>
+                        <form action="{{ route('logout') }}"
+                            method="POST">
+                            @csrf
+                            <x-buttons.primary submit>
+                                {{ __('Logout') }}
+                            </x-buttons.primary>
+                        </form>
+
+                        <x-buttons.link href="{{ route('shop.index') }}" icon="shopping-cart">
+                            @lang('app.shop')
+                        </x-buttons.link>
+                        <x-buttons.link href="{{ route('shop.inventory') }}" icon="archive-box">
+                            @lang('app.inventory')
+                        </x-buttons.link>
+                        <x-buttons.link href="{{ route('slides.manage') }}" icon="presentation-chart-bar">
+                            @lang('app.slides_manage')
+                        </x-buttons.link>
+                        @if(Auth::user()->isSuperAdmin())
+                            <x-buttons.link href="{{ route('filament.admin.pages.dashboard') }}"
+                                icon="lock-closed"
+                                target="_blank">
+                                @lang('app.admin_panel')
+                            </x-buttons.link>
+                        @endif
+                    </x-stack-layout>
                 @endguest
             </x-stack-layout>
         </div>
