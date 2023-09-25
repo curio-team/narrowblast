@@ -72,7 +72,7 @@
 
             if (event.data.type === 'getInviteCode') {
                 // ! This is unreliable if we ever not have the id be the slide path
-                const slideId = event.data.data.split('/').pop().split('.').shift();
+                const slideId = window._narrowBlastPreviewSlideId ? window._narrowBlastPreviewSlideId : event.data.data.split('/').pop().split('.').shift();
                 requestInviteCode(slideId, function (publicPath, inviteCode) {
                     sendPostMessageToRelevantIframe(publicPath, 'onInviteCode', inviteCode);
                 });

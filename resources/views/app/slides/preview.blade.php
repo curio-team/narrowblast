@@ -32,6 +32,8 @@
     <script>
         const slideBackgroundContainerEl = document.querySelector('.reveal');
 
+        window._narrowBlastPreviewSlideId = '{{ $slide->id }}';
+
         function getIframe() {
             return slideBackgroundContainerEl.querySelector('iframe');
         }
