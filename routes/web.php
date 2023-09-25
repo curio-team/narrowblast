@@ -41,6 +41,7 @@ Route::prefix('/')
 
     Route::post('/slides/powerUpJavascript', [SlideController::class, 'powerUpJavascript'])->name('slides.powerUpJavascript');//->middleware('throttle:10,1');
 
+    Route::post('/slides/inviteActivate', [InviteController::class, 'inviteActivate'])->name('slides.inviteActivate');//->middleware('throttle:10,1');
     Route::get('/slides/inviteEnter', [InviteController::class, 'inviteEnter'])->name('slides.inviteEnter');//->middleware('throttle:10,1');
     Route::post('/slides/inviteEnter', [InviteController::class, 'inviteProcess'])->name('slides.inviteProcess');//->middleware('throttle:10,1');
     Route::post('/slides/inviteConfirm', [InviteController::class, 'inviteConfirm'])->name('slides.inviteConfirm');//->middleware('throttle:10,1');

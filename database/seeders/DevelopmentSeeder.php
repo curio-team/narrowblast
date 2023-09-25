@@ -19,7 +19,7 @@ class DevelopmentSeeder extends Seeder
     public function run()
     {
         // Makes development easier if I just add myself to the database
-        User::create([
+        $user = User::create([
             'id' => 'tl10',
             'name' => 'Tim',
             'email' => 'tl10@curio.nl',
@@ -27,18 +27,23 @@ class DevelopmentSeeder extends Seeder
             'credits' => 10000,
         ]);
 
-        // Seed some of the test slides for the first user (tl10)
+        // Give the first user all ShopItems
+        foreach (\App\Models\ShopItem::all() as $shopItem) {
+            $shopItem->purchaseFor($user);
+        }
+
+        // Seed some of the test slides for the first user
         $testSlides = [
             [
                 'title' => 'Test Slide 1',
                 'path' => 'slide-with-js.html',
-                'finalized_at' => now(),
-                'approved_at' => now(),
-                'approver_id' => 'tl10',
             ],
             [
                 'title' => 'Test Slide with Betting',
                 'path' => 'slide-with-js-and-betting.html',
+                'finalized_at' => now(),
+                'approved_at' => now(),
+                'approver_id' => 'tl10',
             ],
         ];
 

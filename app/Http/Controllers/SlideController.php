@@ -63,7 +63,7 @@ class SlideController extends Controller
 
                 if ($result !== false) {
                     $slides[] = [
-                        'publicPath' => asset('storage/'.$screenSlide->slide->getKnownPath()),
+                        'publicPath' => $screenSlide->slide->getKnownUrl(),
                         'data' => $screenSlide->slide->data ?? [],
                     ];
                 }

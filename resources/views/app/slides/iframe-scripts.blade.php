@@ -54,6 +54,8 @@
                     type: type,
                     data: data,
                 }, '*');
+            } else {
+                console.log(`Could not find iframe for public path ${publicPath}`);
             }
 
             window.dispatchEvent(new CustomEvent('narrowblastinviteupdate', {
@@ -69,7 +71,9 @@
             if (!window.enable_invite_system) return;
 
             if (event.data.type === 'getInviteCode') {
-                requestInviteCode({{ $slide->id}}, function (publicPath, inviteCode) {
+                // ! This is unreliable if we ever not have the id be the slide path
+                const slideId = event.data.data.split('/').pop().split('.').shift();
+                requestInviteCode(slideId, function (publicPath, inviteCode) {
                     sendPostMessageToRelevantIframe(publicPath, 'onInviteCode', inviteCode);
                 });
             } else if (event.data.type === 'requestRedistributePrizePool') {
@@ -98,8 +102,12 @@
         function addSlide(slide) {
             slideContainerEl.innerHTML += `<section data-background-iframe="${slide.publicPath}"></section>`;
 
-            if(slide.data.has_javascript_powerup) {
+            if (slide.data.has_javascript_powerup) {
                 setRouteJavascriptPowerup(slide.publicPath, true);
+            }
+            if (slide.data.invite_system_shop_item_user_id != null) {
+                setRouteJavascriptPowerup(slide.publicPath, true);
+                window.enable_invite_system = true;
             }
         }
         window.addSlide = addSlide;
@@ -307,26 +315,26 @@
 
                 console.log(data);
 
-                const routeData = routesData.get(data.slidePath) || {};
+                const routeData = routesData.get(data.publicPath) || {};
                 const invitees = routeData.invitees || [];
                 const newInvitees = data.invitees.filter(invitee => !invitees.find(i => i.id === invitee.id));
                 const leftInvitees = invitees.filter(invitee => !data.invitees.find(i => i.id === invitee.id));
 
                 for(const invitee of newInvitees) {
-                    sendPostMessageToRelevantIframe(data.slidePath, 'onInviteeJoin', invitee);
+                    sendPostMessageToRelevantIframe(data.publicPath, 'onInviteeJoin', invitee);
                 }
 
                 for(const invitee of leftInvitees) {
-                    sendPostMessageToRelevantIframe(data.slidePath, 'onInviteeLeave', invitee);
+                    sendPostMessageToRelevantIframe(data.publicPath, 'onInviteeLeave', invitee);
                 }
 
                 if(data.interactionData != null || data.interactionData != routeData.interactionData) {
-                    sendPostMessageToRelevantIframe(data.slidePath, 'onInteractionData', data.interactionData);
+                    sendPostMessageToRelevantIframe(data.publicPath, 'onInteractionData', data.interactionData);
                 }
 
                 routeData.interactionData = data.interactionData;
                 routeData.invitees = data.invitees;
-                routesData.set(data.slidePath, routeData);
+                routesData.set(data.publicPath, routeData);
 
                 latestCsrfToken = data.csrfToken;
             })

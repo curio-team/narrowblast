@@ -26,4 +26,9 @@ class ShopItemUser extends Pivot
     {
         return $this->belongsTo(ShopItem::class);
     }
+
+    public function inviteSystems()
+    {
+        return $this->hasMany(InviteSystem::class);
+    }
 }

@@ -27,7 +27,7 @@
                             {{ $item->name }}
                         </x-headings.section>
 
-                        <img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->name }}">
+                        <img src="{{ $item->getImageUrl() }}" alt="{{ $item->name }}">
 
                         <p>
                             {{ $item->description }}

@@ -19,12 +19,12 @@ class Slide extends Model
     const STORAGE_DISK = 'local';
     const FILE_DIRECTORY = 'slides';
 
-    const LIVE_STORAGE_DISK = 'public';
+    const LIVE_STORAGE_DISK = 'user_content';
     const LIVE_FILE_DIRECTORY = 'slides';
 
-    const PREVIEW_STORAGE_DISK = 'public';
+    const PREVIEW_STORAGE_DISK = 'user_content';
     const PREVIEW_FILE_DIRECTORY = 'slides-preview';
-    const PREVIEW_LIFETIME_IN_SECONDS = 0;
+    const PREVIEW_LIFETIME_IN_SECONDS = 60;
 
     // Only plain HTML files are allowed
     const ACCEPTED_FILE_TYPES = [
@@ -110,12 +110,17 @@ class Slide extends Model
         return $directory . '/' . $this->id . '.html';
     }
 
+    public function getKnownUrl(): string
+    {
+        return Storage::disk(self::LIVE_STORAGE_DISK)->url($this->getKnownPath());
+    }
+
     /**
      * Extract the provided slide to a known path and leave it there
      */
     public function extractLiveToPublic()
     {
-        return $this->extractToPath($this->getKnownPath(), self::LIVE_STORAGE_DISK);
+        return Storage::disk(self::LIVE_STORAGE_DISK)->url($this->extractToPath($this->getKnownPath(), self::LIVE_STORAGE_DISK));
     }
 
     /**
@@ -140,7 +145,7 @@ class Slide extends Model
             $cleanupJob->delay(now()->addSeconds(self::PREVIEW_LIFETIME_IN_SECONDS));
         }
 
-        return asset('storage/' . $publicPath);
+        return Storage::disk($disk)->url($publicPath);
     }
 
     /**

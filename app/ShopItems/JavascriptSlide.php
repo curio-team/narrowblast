@@ -45,7 +45,7 @@ class JavascriptSlide implements ShopItemInterface
         $slide = $arguments[0];
 
         if (!$slide || !is_object($slide) || get_class($slide) !== Slide::class) {
-            throw new \Exception('No slide id passed to CustomSlideTime::onUse! Please call a developer.');
+            throw new \Exception('No slide id passed to JavascriptSlide::onUse! Please call a developer.');
         }
 
         // Check if the slide has already been used

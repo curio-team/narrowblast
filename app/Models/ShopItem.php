@@ -5,6 +5,7 @@ namespace App\Models;
 use App\ShopItems\ForShopItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class ShopItem extends Model
 {
@@ -29,6 +30,11 @@ class ShopItem extends Model
     {
         return $this->max_per_user !== null
             && $this->shopItemUsers()->where('user_id', auth()->id())->count() >= $this->max_per_user;
+    }
+
+    public function getImageUrl()
+    {
+        return Storage::disk(self::STORAGE_DISK)->url($this->image_path);
     }
 
     /**

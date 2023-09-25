@@ -12,7 +12,9 @@ This system allows students to create (interactive) slides for narrowcasting. St
     * Create and configure the `.env` file:
         * Fill `AMO_CLIENT_ID` and `AMO_CLIENT_SECRET` with the correct (secret) app secrets for the [amoclient OpenID auth](https://github.com/StudioKaa/amoclient)
         * Fill `SLIDE_SHOW_SECRET_TICK_KEY` with a random secret string. This is used to prevent spamming of the slideshow tick endpoint. When setting up a narrowcasting screen you will have to enter this.
-    * `php artisan storage:link`
+        * Fill `USER_CONTENT_PATH` with the path to the directory where uploaded files should be stored. This directory should be accessible by the webserver.
+        * Fill `USER_CONTENT_URL` with the URL to the directory where uploaded files should be accessible from. This domain should be different from the domain where the website is hosted. This is to prevent XSS attacks.
+    * `php artisan storage:link` (needed for shop images)
     * `php artisan migrate --seed` (The seeder automatically adds the shop items and 1 screen)
     * `npm run watch`
     * `php artisan serve`
@@ -27,7 +29,7 @@ The website is now available for
 * To run the queue that removes preview slides:
     * Locally for development use: `php artisan queue:work --stop-when-empty` to run the queue manually (wait 5 minutes after adding test slide)
     * On production set this CRON task: `* * * * * cd /path-to-your-project && php artisan queue:work --stop-when-empty >> /dev/null 2>&1`
-* Configure uploaded sites and previews to go live on a different origin, to protect from XSS attacks.
+* Configure uploaded sites and previews to go live on a different origin, to protect from XSS attacks. See `USER_CONTENT_PATH` and `USER_CONTENT_URL` in the `.env` file.
 * Configure your apache vhosts file to allow access to uploaded files from inside the sandboxed iframe (some students use JS to include content from their slide):
 ```
 <VirtualHost _default_:443>

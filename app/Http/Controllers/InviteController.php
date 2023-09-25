@@ -6,9 +6,49 @@ use App\Models\InviteSystem;
 use App\Models\ShopItemUser;
 use App\Models\Slide;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule as ValidationRule;
 
 class InviteController extends Controller
 {
+    /**
+     * Activates JavaScript capabilities for the given slide
+     */
+    public function inviteActivate(Request $request)
+    {
+        $request->validate([
+            'slide_id' => [
+                'required',
+                ValidationRule::exists('slides', 'id')->where(function ($query) {
+                    $query->whereIn('id', auth()->user()->approvedSlides()->pluck('id'));
+                }),
+            ],
+            'shop_item_user_id' => [
+                'required',
+                'exists:shop_item_user,id',
+            ],
+        ]);
+
+        // Check that the user owns the given shop item
+        $shopItemUser = auth()->user()->shopItemUsers()->find($request->shop_item_user_id);
+
+        if (!$shopItemUser) {
+            return redirect()->back()->withErrors([
+                'shop_item_user_id' => __('You do not own this item'),
+            ]);
+        }
+
+        $slide = Slide::find($request->slide_id);
+        $result = $shopItemUser->shopItem->callShopItemMethod('onUse', $shopItemUser, $slide);
+
+        if ($result !== null) {
+            return $result;
+        }
+
+        $shopItemUser->save();
+
+        return redirect()->back()->with('success', 'Invite System op slide geactiveerd!');
+    }
+
     /**
      * Display the invite code entry page
      */
@@ -138,7 +178,7 @@ class InviteController extends Controller
             ]);
         } else {
             return view('app.slides.invitee-interact', [
-                'publicPath' => asset('storage/'.$slide->getKnownPath()),
+                'publicPath' => $slide->getKnownUrl(),
                 'localId' => auth()->user()->id,
                 'slide' => $slide,
                 'inviteCode' => $inviteSystem->latest_code,
@@ -184,11 +224,11 @@ class InviteController extends Controller
             $inviteSystem = new \App\Models\InviteSystem;
             $inviteSystem->title = $shopItemUser->data['invite_system_title'];
             $inviteSystem->description = $shopItemUser->data['invite_system_description'];
-            $inviteSystem->latest_code = $shopItemUser->data['invite_system_latest_code'];
             $inviteSystem->latest_code = $inviteSystem->generateCode();
-            $inviteSystem->invitee_slots = $shopItemUser->data['invite_system_invitee_slots'];
+            $inviteSystem->invitee_slots = isset($shopItemUser->data['invite_system_invitee_slots']) ? $shopItemUser->data['invite_system_invitee_slots'] : null;
             $inviteSystem->entry_fee_in_credits = $shopItemUser->data['invite_system_entry_fee_in_credits'];
-            $inviteSystem->user_id = $shopItemUser->used_id;
+            $inviteSystem->user_id = $shopItemUser->user_id;
+            $inviteSystem->shop_item_user_id = $shopItemUser->id;
             $inviteSystem->save();
         } else {
             // Destroy existing preview invite systems for this user
@@ -208,6 +248,7 @@ class InviteController extends Controller
         return response()->json([
             'inviteCode' => $inviteSystem->formatCode(),
             'csrfToken' => csrf_token(),
+            'publicPath' => $slide->getKnownUrl(),
         ]);
     }
 
@@ -247,7 +288,9 @@ class InviteController extends Controller
             ],
         ]);
 
-        $inviteSystem = \App\Models\InviteSystem::where('latest_code', $request->invite_code)->firstOrFail();
+        $inviteSystem = \App\Models\InviteSystem::with('shopItemUser')
+            ->where('latest_code', $request->invite_code)
+            ->firstOrFail();
         $this->checkSecretTickKey($request, $inviteSystem);
 
         $invitees = $inviteSystem->invitees()->with('user')->get()->map(function ($invitee) {
@@ -264,12 +307,15 @@ class InviteController extends Controller
                 $invitee['id'] = self::makePreviewId($invitee['id'], $key);
                 return $invitee;
             });
+        } else {
+            $publicPath = Slide::findOrFail($inviteSystem->shopItemUser->data['slide_id'])->getKnownUrl();
         }
 
         return response()->json([
             'invitees' => $invitees,
             'interactionData' => $inviteSystem->data,
             'csrfToken' => csrf_token(),
+            'publicPath' => isset($publicPath) ? $publicPath : null,
         ]);
     }
 
@@ -297,8 +343,11 @@ class InviteController extends Controller
         \DB::beginTransaction();
 
         $invitees = $inviteSystem->invitees()->with('user')->get();
-        $inviteeIds = $invitees->pluck('user_id')->map(function ($id, $key) {
-            return self::makePreviewId($id, $key);
+        $inviteeIds = $invitees->pluck('user_id')->map(function ($id, $key) use ($inviteSystem) {
+            if ($inviteSystem->isPreview()) {
+                return self::makePreviewId($id, $key);
+            }
+            return $id;
         })->toArray();
 
         // Check if the sum of the redistributed balance matches the total entry fee pool
@@ -330,6 +379,8 @@ class InviteController extends Controller
                 $user->credits += $balance;
                 $user->save();
             }
+
+            $publicPath = Slide::findOrFail($inviteSystem->shopItemUser->data['slide_id'])->getKnownUrl();
         }
 
         // Remove the invite system
@@ -340,6 +391,7 @@ class InviteController extends Controller
         return response()->json([
             'wasSuccesful' => true,
             'csrfToken' => csrf_token(),
+            'publicPath' => isset($publicPath) ? $publicPath : null,
         ]);
     }
 
@@ -365,9 +417,14 @@ class InviteController extends Controller
         $inviteSystem->data = $request->interaction_data;
         $inviteSystem->save();
 
+        if (!$inviteSystem->isPreview()) {
+            $publicPath = Slide::findOrFail($inviteSystem->shopItemUser->data['slide_id'])->getKnownUrl();
+        }
+
         return response()->json([
             'wasSuccesful' => true,
             'csrfToken' => csrf_token(),
+            'publicPath' => isset($publicPath) ? $publicPath : null,
         ]);
     }
 }

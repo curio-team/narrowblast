@@ -87,7 +87,6 @@
         const HASH_INTERACTION_PREFIX = '#interaction-';
 
         document.addEventListener('DOMContentLoaded', function() {
-            console.log(window.location.hash);
             if (window.location.hash.startsWith(HASH_INTERACTION_PREFIX)) {
                 const localId = window.location.hash.substr(HASH_INTERACTION_PREFIX.length);
                 interactionScreen(localId);
@@ -119,6 +118,7 @@
                 // Use postMessage to ask the parent window to send us the invite code
                 window.parent.postMessage({
                     type: 'getInviteCode',
+                    data: window.location.href,
                 }, '*');
             }
             resetGame();
