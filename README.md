@@ -44,28 +44,6 @@ The website is now available for
 </VirtualHost>
 ```
 
-#### Setting up the deployment tool
-
-1. Set up a webhook in GitHub:
-    * Content Type: `application/json`
-    * URL: `https://narrowblast.curio.codes/update-deployment.php`.
-    * Secret: must match `WEBHOOK_SECRET` in the `.env` file.
-
-The deployment tool has two operating modes:
-
-- `npm run update-ci`: An incoming GitHub webhook will cause the `update-ci` npm script to run:
-    - The application is immediately put into maintenance mode
-    - The local repo is updated, migrated and optimized
-    - Access the site by appending `letmeenteranywayplz` to the end of any URL.
-    - When testing is complete and you are satisfied run the following command through SSH to bring the site back up: `php artisan up`
-
-- `npm run notify-takedown <url> <time>`: A developer sends a notify-takedown to warn users the site will go offline at a certain date and time:
-    - Run `npm run notify-takedown <url> <time>` on your own device
-        - `<url>` is the url to either `https://narrowblast.curio.codes` or `http://localhost:8000` for testing locally
-        - `<time>` can be given as either a [UNIX time](https://www.unixtimestamp.com/) or datetime as Y-m-d\TH:i (in our Amsterdam timezone)
-    - This npm script will make a request to the deployment tool for you and ensure the downtime indicator is set
-    - E.g: `npm run notify-takedown http://localhost:8000 2022-10-31T15:30`
-
 ## Notes:
 
 ### cURL error 60: SSL certificate expired
