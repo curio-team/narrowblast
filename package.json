@@ -4,7 +4,7 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "update-ci": "( echo $(date) && php artisan down --refresh=15 --secret=\"letmeenteranywayplz\" && rm -f public/next-maintenance.txt && git restore . && git pull && git submodule sync && git submodule update && git submodule status && composer install --no-interaction --optimize-autoloader && npm install && npm run build && php artisan livewire:discover && php artisan migrate --force && php artisan optimize ) > storage/logs/last-update-ci-output.log",
+        "update-ci": "( echo $(date) && php artisan down --refresh=15 --secret=\"letmeenteranywayplz\" && rm -f public/next-maintenance.txt && git restore . && git pull && git submodule sync && git submodule update && git submodule status && composer install --no-interaction --optimize-autoloader && npm install && npm run build && php artisan migrate --force && php artisan optimize ) > storage/logs/last-update-ci-output.log",
         "notify-takedown": "node tools/notify-takedown.js"
     },
     "devDependencies": {
