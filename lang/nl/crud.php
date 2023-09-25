@@ -27,6 +27,9 @@ return [
         'change_in_credits' => 'De credits van ":user" veranderen met:',
         'change_in_credits_description' => 'Bij positieve waarde worden credits toegevoegd, bij negatieve waarde worden credits afgetrokken.',
         'change_credits' => 'credits veranderen',
+        'attendance_file' => 'Aanwezigheidsbestand',
+        'import_attendance_invalid_file' => 'Het bestand dat je hebt geüpload is geen geldig aanwezigheidsbestand.',
+        'import_attendance_success' => 'Aanwezigheid succesvol geïmporteerd',
     ],
 
     'screens' => [

@@ -16,7 +16,7 @@ class User extends Authenticatable implements FilamentUser
     use HasFactory;
     use Searchable;
 
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['id','name', 'email','type','password','credits'];
 
     protected $searchableFields = ['*'];
 

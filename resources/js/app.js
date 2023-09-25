@@ -1,8 +1,12 @@
 import './bootstrap';
 import '../sass/app.scss';
-
 import Reveal from 'reveal.js';
 import Markdown from 'reveal.js/plugin/markdown/markdown.esm.js';
+
+import.meta.glob([
+    '../images/**',
+    '../fonts/**',
+]);
 
 if (document.querySelector('.reveal')) {
     const reveal = new Reveal({
