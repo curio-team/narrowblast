@@ -1,9 +1,9 @@
 <nav x-data="{ openSidebar: false }" class="max-w-screen-md lg:max-w-screen-lg mx-auto">
     <x-stack-layout row class="flex justify-between h-20 bg-white shadow-md p-4">
-        <a class="flex items-center gap-2 h-full border-r border-zinc-200 sm:border-none pr-4 sm:pr-0"
+        <a class="flex items-center gap-2 h-full border-zinc-200 pr-4 sm:pr-0"
             href="{{ url('/') }}">
             <x-logos.light-logo class="w-[50px] sm:w-[100px]"/>
-            <h1 class="font-bold text-2xl whitespace-nowrap">
+            <h1 class="font-bold text-2xl whitespace-nowrap border-l sm:border-none pl-2">
                 🚀 NarrowBlast
             </h1>
         </a>
@@ -16,8 +16,8 @@
                           height="32px" />
         </button>
 
-        <div x-cloak class="md:flex w-full sm:min-w-[360px] z-50 items-center bg-white bottom-0 top-0 right-0 flex fixed md:static p-4 md:p-0 shadow-md md:shadow-none gap-4 flex-col md:flex-row"
-            :class="{ '!hidden': !openSidebar }">
+        <div x-cloak class="md:flex justify-start sm:justify-end w-full sm:min-w-[360px] z-50 items-center bg-white bottom-0 top-0 right-0 flex fixed md:static p-4 md:p-0 shadow-md md:shadow-none gap-4 flex-col md:flex-row"
+            :class="{ 'hidden md:flex': !openSidebar }">
             <button class="block md:hidden self-end"
                     type="button"
                     @click="openSidebar = false"
@@ -26,19 +26,20 @@
                                height="32px"/>
             </button>
 
-            <x-stack-layout row class="items-center mr-4">
+            <x-stack-layout row class="items-center">
                 @guest
                     <x-buttons.link href="{{ route('login') }}">{{ __('Login') }}</x-buttons.link>
-                    @if (Route::has('register'))
-                        <x-buttons.link href="{{ route('register') }}">{{ __('Register') }}</x-buttons.link>
-                    @endif
                 @else
-                    <x-stack-layout class="items-center mr-4">
+                    <x-stack-layout class="items-stretch md:items-center flex-col md:flex-row">
                         <x-buttons.link
                             target="_blank"
                             href="{{ url('https://login.curio.codes') }}">
                             {{ Auth::user()->name }} <span class="caret"></span>
                         </x-buttons.link>
+
+                        <div class="md:hidden w-full">
+                            @livewire('credit-counter', ['center' => true])
+                        </div>
 
                         <form action="{{ route('logout') }}"
                             method="POST">
@@ -48,25 +49,28 @@
                             </x-buttons.primary>
                         </form>
 
-                        <x-buttons.link href="{{ route('shop.index') }}" icon="shopping-cart">
-                            @lang('app.shop')
-                        </x-buttons.link>
-                        <x-buttons.link href="{{ route('shop.inventory') }}" icon="archive-box">
-                            @lang('app.inventory')
-                        </x-buttons.link>
-                        <x-buttons.link href="{{ route('slides.manage') }}" icon="presentation-chart-bar">
-                            @lang('app.slides_manage')
-                        </x-buttons.link>
-                        <x-buttons.link href="{{ route('slides.inviteEnter') }}" icon="qr-code">
-                            @lang('app.enter_invite_code')
-                        </x-buttons.link>
-                        @if(Auth::user()->isSuperAdmin())
+                        <x-stack-layout column class="md:hidden items-stretch">
+                            <x-buttons.link href="{{ route('shop.index') }}" icon="shopping-cart" center>
+                                @lang('app.shop')
+                            </x-buttons.link>
+                            <x-buttons.link href="{{ route('shop.inventory') }}" icon="archive-box" center>
+                                @lang('app.inventory')
+                            </x-buttons.link>
+                            <x-buttons.link href="{{ route('slides.manage') }}" icon="presentation-chart-bar" center>
+                                @lang('app.slides_manage')
+                            </x-buttons.link>
+                            <x-buttons.link href="{{ route('slides.inviteEnter') }}" icon="qr-code" center>
+                                @lang('app.enter_invite_code')
+                            </x-buttons.link>
+                            @if(Auth::user()->isSuperAdmin())
                             <x-buttons.link href="{{ route('filament.admin.pages.dashboard') }}"
+                                center
                                 icon="lock-closed"
                                 target="_blank">
                                 @lang('app.admin_panel')
                             </x-buttons.link>
-                        @endif
+                            @endif
+                        </x-stack-layout>
                     </x-stack-layout>
                 @endguest
             </x-stack-layout>
@@ -74,7 +78,7 @@
     </x-stack-layout>
 
     @auth
-        <x-stack-layout tight row class="md:rounded-b items-stretch shadow-md overflow-clip">
+        <x-stack-layout tight row class="hidden md:flex md:rounded-b items-stretch shadow-md overflow-clip">
             <x-stack-layout row class="py-2 px-4 items-center grow bg-zinc-300/25 flex-wrap">
                 <x-buttons.link href="{{ route('shop.index') }}" icon="shopping-cart">
                     @lang('app.shop')
