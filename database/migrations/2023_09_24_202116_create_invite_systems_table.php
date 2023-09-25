@@ -16,14 +16,17 @@ return new class extends Migration
         Schema::create('invite_systems', function (Blueprint $table) {
             $table->uuid('id')->primary();
 
-            $table->foreignId('shop_item_user_id')->references('id')->on('shop_item_user')->cascadeOnDelete();
+            $table->foreignId('shop_item_user_id')->nullable()->references('id')->on('shop_item_user')->cascadeOnDelete(); // Null on preview
+            $table->string('user_id')->references('id')->on('users')->cascadeOnDelete(); // Needed because shop_item_user_id can be null sometimes
 
             $table->string('title');
+            $table->string('latest_code')->nullable()->unique();
             $table->string('description');
-            $table->boolean('is_preview')->default(true);
 
             $table->unsignedInteger('invitee_slots')->nullable();
-            $table->unsignedInteger('entry_free_in_credits')->nullable();
+            $table->unsignedInteger('entry_fee_in_credits')->nullable();
+
+            $table->json('data')->nullable();
 
             $table->timestamps();
         });

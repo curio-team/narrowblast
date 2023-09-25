@@ -17,32 +17,14 @@
         </div>
     </div>
 
-    @include('app.slides.sandbox-iframe-script')
+    @include('app.slides.iframe-scripts')
 
     <script>
         const tickUrl = `{{ route('slides.slideShowTick', $screen) }}`;
-        const slideContainerEl = document.getElementById('slideContainer');
-        let latestCsrfToken = '{{ csrf_token() }}';
         let hasLoaded = false;
 
-        function clearSlides() {
-            slideContainerEl.innerHTML = '';
-        }
-
-        function addSlide(slide) {
-            slideContainerEl.innerHTML += `<section data-background-iframe="${slide.publicPath}"></section>`;
-
-            if(slide.data.has_javascript_powerup) {
-                routesWithJavascript.set(slide.publicPath, true);
-            }
-        }
-
-        function findSlideByPublicPath(publicPath) {
-            return slideContainerEl.querySelector(`section[data-background-iframe="${publicPath}"]`);
-        }
-
         function updateSlideChanges(slides) {
-            const slideEls = slideContainerEl.querySelectorAll('section[data-background-iframe]');
+            const slideEls = getSlideContainer().querySelectorAll('section[data-background-iframe]');
             let madeChanges = false;
 
             for (const slideEl of slideEls) {
@@ -73,7 +55,6 @@
         }
 
         function doTick(secretTickKey) {
-            // POST and update slides
             fetch(tickUrl, {
                 method: 'POST',
                 headers: {
@@ -108,37 +89,6 @@
             .catch(error => {
                 console.error(error);
             });
-        }
-
-        function passwordModal(message, callback) {
-            const modal = document.createElement('div');
-            modal.classList.add('fixed', 'top-0', 'left-0', 'w-screen', 'h-screen', 'flex', 'justify-center', 'items-center', 'bg-black', 'bg-opacity-50', 'z-50');
-
-            const modalContent = document.createElement('div');
-            modalContent.classList.add('bg-white', 'p-4', 'rounded', 'shadow-lg', 'text-center', 'flex', 'flex-col', 'gap-4');
-
-            const modalMessage = document.createElement('span');
-            modalMessage.innerText = message;
-
-            const modalInput = document.createElement('input');
-            modalInput.setAttribute('type', 'password');
-            modalInput.classList.add('border', 'border-gray-300', 'rounded', 'p-2');
-
-            const modalSubmit = document.createElement('button');
-            modalSubmit.classList.add('bg-blue-500', 'text-white', 'rounded', 'p-2', 'hover:bg-blue-600', 'transition-colors', 'duration-200', 'ease-in-out');
-            modalSubmit.innerText = 'Submit';
-
-            modalSubmit.addEventListener('click', function() {
-                modal.remove();
-                localStorage.setItem('secretTickKey', modalInput.value);
-                callback(modalInput.value);
-            });
-
-            modalContent.appendChild(modalMessage);
-            modalContent.appendChild(modalInput);
-            modalContent.appendChild(modalSubmit);
-            modal.appendChild(modalContent);
-            document.body.appendChild(modal);
         }
 
         let secretTickKey = localStorage.getItem('secretTickKey');

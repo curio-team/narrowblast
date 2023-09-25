@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ShopItemSeeder extends Seeder

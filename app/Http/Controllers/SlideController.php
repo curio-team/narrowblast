@@ -6,9 +6,7 @@ use App\Models\Screen;
 use App\Models\ShopItemUser;
 use App\Models\Slide;
 use Illuminate\Contracts\Database\Query\Builder;
-use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule as ValidationRule;
 
 class SlideController extends Controller

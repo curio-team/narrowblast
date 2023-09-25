@@ -18,17 +18,21 @@
             height: 100%;
             overflow: hidden;
         }
-        #slide {
+        #slide, #slideInteraction {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
 
             transform: scale(0);
             transition: all 1s ease-in-out;
         }
-        #slide.show {
+        #slide.show, #slideInteraction.show {
             transform: scale(1);
         }
 
@@ -45,14 +49,14 @@
         .hidden {
             display: none;
         }
-        #playerList {
+        #inviteeList {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             gap: 0.5em;
         }
-        #playerList > span::after {
+        #inviteeList > span::after {
             content: ',';
         }
     </style>
@@ -61,62 +65,163 @@
     <div id="slide">
         <div>
             <h1>Sample Slide</h1>
-            <p>Showing how to access the credits API to get users to bet money</p>
+            <p>Showing how to access the credits API to get users to:</p>
+            <ul>
+                <li>Pay an entree fee</li>
+                <li>Roll the dice</li>
+                <li>Redistribute the fees</li>
+            </ul>
         </div>
         <div>
             <h2>Invite Code: <span id="inviteCode"></span></h2>
             <h2>Prize Pool: <span id="prizePool"></span></h2>
-            <h2>Players: <div id="playerList"></div></h2>
+            <h2>Invitees: <div id="inviteeList"></div></h2>
         </div>
+    </div>
+    <div id="slideInteraction">
+        <p>Welcome, <span id="localId"></span></p>
+        <p id="localWinner" class="hidden">You won!</p>
         <img src="https://media.giphy.com/media/LdOyjZ7io5Msw/giphy.gif" alt="Showering in Cash" class="hidden">
     </div>
     <script>
+        const HASH_INTERACTION_PREFIX = '#interaction-';
+
         document.addEventListener('DOMContentLoaded', function() {
+            console.log(window.location.hash);
+            if (window.location.hash.startsWith(HASH_INTERACTION_PREFIX)) {
+                const localId = window.location.hash.substr(HASH_INTERACTION_PREFIX.length);
+                interactionScreen(localId);
+
+                return;
+            }
+
+            mainScreen();
+        });
+
+        function mainScreen(){
             document.querySelector('#slide').classList.add('show');
 
+            // You will configure the entryFee and slots in your inventory, when you activate the item
             const entryFee = 100;
+            const slots = 2;
+
             let prizePool = 0;
+            const invitees = [];
+
+            function resetGame() {
+                prizePool = 0;
+                invitees.length = 0;
+
+                document.querySelector('#inviteeList').innerHTML = '';
+                document.querySelector('#localWinner').classList.add('hidden');
+                document.querySelector('#slideInteraction img').classList.add('hidden');
+
+                // Use postMessage to ask the parent window to send us the invite code
+                window.parent.postMessage({
+                    type: 'getInviteCode',
+                }, '*');
+            }
+            resetGame();
 
             function updatePrizePool() {
                 document.querySelector('#prizePool').innerText = prizePool;
+
+                if (prizePool >= entryFee * slots) {
+                    // If we have enough money in the prize pool, roll the dice and see which invitee wins
+                    const winner = Math.floor(Math.random() * invitees.length);
+                    const winnerInvitee = invitees[winner];
+
+                    // First show the winner screen to the winner
+                    window.parent.postMessage({
+                        type: 'requestSetInteractionData',
+                        data: {
+                            winner: winnerInvitee,
+                        },
+                    }, '*');
+
+                    setTimeout(function(){
+                        // Use postMessage to inform the parent window that we want to redistribute the prize pool to the winner
+                        // We must send all the invitee id's that joined, with the new balance for each invitee
+                        // The total must always match the prize pool, or the parent window will reject the request and all invitees
+                        // will be refunded their entry fee.
+                        const redistributedWealth = {};
+
+                        for (let i = 0; i < invitees.length; i++) {
+                            const invitee = invitees[i];
+                            redistributedWealth[invitee.id] = invitee.id === winnerInvitee.id ? prizePool : 0;
+                        }
+
+                        window.parent.postMessage({
+                            type: 'requestRedistributePrizePool',
+                            data: redistributedWealth,
+                        }, '*');
+                    }, 10000); // We delay, so that all users get the update. And, so that the winner can see the winner screen.
+                }
             }
 
             window.addEventListener('message', function(event) {
-                console.log('Received message from parent window: ', event);
                 if (event.data.type === 'onInviteCode') {
                     // When we receive the invite code, update the invite code element
-                    document.querySelector('#inviteCode').innerText = event.data.inviteCode;
-                } else if (event.data.type === 'onPlayerJoin') {
-                    // When a player joins update the player list
-                    const player = event.data.player;
-                    const playerList = document.querySelector('#playerList');
-                    const playerListItem = document.createElement('span');
-                    playerListItem.setAttribute('data-player-id', player.id);
-                    playerListItem.innerText = `${player.name} (${player.id})`;
-                    playerList.appendChild(playerListItem);
+                    document.querySelector('#inviteCode').innerText = event.data.data;
+                } else if (event.data.type === 'onInviteeJoin') {
+                    // When a invitee joins update the invitee list
+                    const invitee = event.data.data;
+                    const inviteeList = document.querySelector('#inviteeList');
+                    const inviteeListItem = document.createElement('span');
+                    inviteeListItem.setAttribute('data-invitee-id', invitee.id);
+                    inviteeListItem.innerText = `${invitee.name} (${invitee.id})`;
+                    inviteeList.appendChild(inviteeListItem);
+
+                    invitees.push(invitee);
 
                     // Update the prize pool
-                    prizePool += player.entryFee;
+                    prizePool += invitee.entryFee;
                     updatePrizePool();
-                } else if (event.data.type === 'onPlayerLeave') {
-                    // When a player leaves update the player list
-                    const player = event.data.player;
-                    const playerList = document.querySelector('#playerList');
-                    const playerListItem = playerList.querySelector(`span[data-player-id="${player.id}"]`);
-                    playerList.removeChild(playerListItem);
+                } else if (event.data.type === 'onInviteeLeave') {
+                    // When a invitee leaves update the invitee list
+                    const invitee = event.data.data;
+                    const inviteeList = document.querySelector('#inviteeList');
+                    const inviteeListItem = inviteeList.querySelector(`span[data-invitee-id="${invitee.id}"]`);
+
+                    if(!inviteeListItem) {
+                        // We may be getting this event when the game has already reset
+                        return;
+                    }
+
+                    inviteeList.removeChild(inviteeListItem);
+
+                    for (let i = 0; i < invitees.length; i++) {
+                        if (invitees[i].id === invitee.id) {
+                            invitees.splice(i, 1);
+                            break;
+                        }
+                    }
 
                     // Update the prize pool
-                    prizePool -= player.entryFee;
+                    prizePool -= invitee.entryFee;
                     updatePrizePool();
+                } else if (event.data.type === 'onRedistributePrizePool') {
+                    resetGame();
                 }
             });
+        }
 
-            // Use postMessage to ask the parent window to send us the invite code
-            window.parent.postMessage({
-                type: 'getInviteCode',
-                entryFee: entryFee
-            }, '*');
-        });
+        function interactionScreen(localId) {
+            document.querySelector('#localId').innerText = localId;
+            document.querySelector('#slideInteraction').classList.add('show');
+
+            window.addEventListener('message', function(event) {
+                if (event.data.type === 'onInteractionData') {
+                    const interactionData = event.data.data;
+
+                    // If we have a winner, show the winner screen
+                    if (interactionData.winner) {
+                        document.querySelector('#localWinner').classList.remove('hidden');
+                        document.querySelector('#slideInteraction img').classList.remove('hidden');
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>

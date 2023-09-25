@@ -77,12 +77,15 @@ class Slide extends Model
      *
      */
 
-    public function setData(string $key, mixed $value)
+    public function setData(string $key, mixed $value, bool $save = true)
     {
         $data = $this->data ?? new \ArrayObject();
         $data[$key] = $value;
         $this->data = $data;
-        $this->save();
+
+        if ($save) {
+            $this->save();
+        }
     }
 
     /**

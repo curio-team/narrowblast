@@ -88,4 +88,12 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(ShopItemUser::class, 'user_id');
     }
+
+    /**
+     * Invite systems related to this user
+     */
+    public function inviteSystems()
+    {
+        return $this->hasMany(InviteSystem::class, 'user_id');
+    }
 }
