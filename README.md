@@ -53,6 +53,17 @@ The website is now available for
     * URL: `https://narrowblast.curio.codes/update-deployment.php`.
     * Secret: must match `WEBHOOK_SECRET` in the `.env` file.
 
+2. Ensure apache (`sudo chown -R www-data narrowblast`) has the neccessary rights to directories and programs like npm and git.
+3. Create a `../narrowblast-update.sh` just up a level of root that `www-data` has access to. The contents of this file should be something like:
+    ```bash
+    #!/bin/bash
+    eval "$(ssh-agent -s)"
+    ssh-add ~/.ssh/id_rsa # your private key that has been added as a deploy key
+    cd /var/www/html/narrowblast
+    git pull
+    ```
+
+
 The deployment tool has two operating modes:
 
 - `npm run update-ci`: An incoming GitHub webhook will cause the `update-ci` npm script to run:
