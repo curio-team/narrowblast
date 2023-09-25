@@ -2,8 +2,6 @@
 
 This system allows students to create (interactive) slides for narrowcasting. Students can (weekly) earn credits with good attendance and use these to enhance their slides. Teachers moderate the slides and can add their own slides to the rotation.
 
-<img src="./.github/screenshot-inventory.png" width="400px" alt="Screenshot of the inventory page" />
-
 ## Getting Started
 
 ### Local development
