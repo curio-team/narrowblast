@@ -81,5 +81,12 @@ return [
         ],
 
         'out_of_time' => 'Je hebt geen tijd meer over op dit item',
+
+        'required_type' => 'Alleen voor type gebruiker',
+        'required_type_options' => [
+            'no_restriction' => 'geen beperking',
+            'student' => 'student',
+            'teacher' => 'docent',
+        ],
     ],
 ];

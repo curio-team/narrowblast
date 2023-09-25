@@ -28,6 +28,8 @@ return new class extends Migration
             $table->integer('cost_in_credits')->unsigned();
             $table->unsignedInteger('max_per_user')->nullable();
 
+            $table->string('required_type')->nullable();
+
             $table->timestamps();
         });
     }

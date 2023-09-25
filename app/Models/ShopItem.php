@@ -22,6 +22,7 @@ class ShopItem extends Model
         'image_path',
         'cost_in_credits',
         'max_per_user',
+        'required_type',
     ];
 
     public function userHasMaximum(User $user)

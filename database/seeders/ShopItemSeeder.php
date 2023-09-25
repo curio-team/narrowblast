@@ -46,6 +46,7 @@ class ShopItemSeeder extends Seeder
                 'image_path' => 'betting.png',
                 'unique_id' => 'slide_invite_system',
                 'cost_in_credits' => 5000,
+                'required_type' => 'teacher', // wip
             ],
         ];
 

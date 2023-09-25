@@ -24,8 +24,14 @@ class ListShopItems extends Component implements HasForms, HasTable
 
     public function table(Table $table): Table
     {
+        $query = ShopItem::query()
+            ->where(function (Builder $query) {
+                $query->whereNull('required_type')
+                    ->orWhere('required_type', auth()->user()->type);
+            });
+
         return $table
-            ->query(ShopItem::query())
+            ->query($query)
             ->columns([
                 Tables\Columns\ImageColumn::make('image_path')
                     ->visibleFrom('md'),
@@ -99,7 +105,7 @@ class ListShopItems extends Component implements HasForms, HasTable
                         ]);
                     })
                     ->modalSubmitActionLabel(__('crud.shop_items.purchase_confirmation_button'))
-                    ->action(function (Action $action, ShopItem $record): void {
+                    ->action(function (ShopItem $record): void {
                         $mutation = -$record->cost_in_credits;
                         /** @var \App\Models\User */
                         $user = auth()->user();
@@ -115,6 +121,14 @@ class ListShopItems extends Component implements HasForms, HasTable
                         if ($record->userHasMaximum(auth()->user())) {
                             Notification::make()
                                 ->title(__('crud.shop_items.purchase_failed', ['reason' => __('crud.shop_items.purchase_failed_reasons.max_per_user')]))
+                                ->danger()
+                                ->send();
+                            return;
+                        }
+
+                        if ($record->required_type !== null && $record->required_type !== $user->type) {
+                            Notification::make()
+                                ->title(__('crud.shop_items.purchase_failed', ['reason' => __('crud.shop_items.required_type_options.' . $record->required_type)]))
                                 ->danger()
                                 ->send();
                             return;
@@ -138,9 +152,8 @@ class ListShopItems extends Component implements HasForms, HasTable
                                     ->title(__('crud.shop_items.purchase_success', ['item' => $record->name]))
                                     ->success()
                                     ->send();
-                            });
-                        }
-                    ),
+                        });
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

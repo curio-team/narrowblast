@@ -32,7 +32,9 @@ class ShopItemResource extends Resource
 
                 Forms\Components\TextInput::make('unique_id')
                     ->maxLength(255)
-                    ->unique('shop_items', 'unique_id')
+                    ->unique('shop_items', 'unique_id', function (?ShopItem $record) {
+                        return $record;
+                    })
                     ->disabled(function (?ShopItem $record) {
                         return $record?->exists ?? false;
                     })
@@ -75,6 +77,15 @@ class ShopItemResource extends Resource
                     ->minValue(0)
                     ->maxValue(9999999999)
                     ->required(fn (Get $get): bool => $get('limit_purchases') === true),
+
+                Forms\Components\Select::make('required_type')
+                    ->label(ucfirst(__('crud.shop_items.required_type')))
+                    ->placeholder(ucfirst(__('crud.shop_items.required_type_options.no_restriction')))
+                    ->options([
+                        'student' => ucfirst(__('crud.shop_items.required_type_options.student')),
+                        'teacher' => ucfirst(__('crud.shop_items.required_type_options.teacher')),
+                    ])
+                    ->default(null),
             ])
             ->columns(1);
     }
@@ -95,6 +106,9 @@ class ShopItemResource extends Resource
                     ->formatStateUsing(function (string $state): string {
                         return \Str::limit($state, 50);
                     })
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('required_type')
                     ->searchable(),
             ])
             ->filters([
