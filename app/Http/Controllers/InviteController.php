@@ -26,6 +26,25 @@ class InviteController extends Controller
                 'required',
                 'exists:shop_item_user,id',
             ],
+            'invite_system_title' => [
+                'required',
+                'string'
+            ],
+            'invite_system_description' => [
+                'required',
+                'string'
+            ],
+            'invite_system_invitee_slots' => [
+                'nullable',
+                'integer',
+                'min:1',
+            ],
+            'invite_system_entry_fee_in_credits' => [
+                'required',
+                'integer',
+                'min:0',
+                'max:1000',
+            ],
         ]);
 
         // Check that the user owns the given shop item
@@ -37,8 +56,22 @@ class InviteController extends Controller
             ]);
         }
 
+        if ($shopItemUser->shopItem->unique_id !== 'slide_invite_system') {
+            return redirect()->back()->withErrors([
+                'shop_item_user_id' => __('This item is not a slide invite system'),
+            ]);
+        }
+
         $slide = Slide::find($request->slide_id);
-        $result = $shopItemUser->shopItem->callShopItemMethod('onUse', $shopItemUser, $slide);
+        $result = $shopItemUser->shopItem->callShopItemMethod(
+            'onUse',
+            $shopItemUser,
+            $slide,
+            $request->invite_system_title,
+            $request->invite_system_description,
+            $request->invite_system_invitee_slots,
+            $request->invite_system_entry_fee_in_credits
+        );
 
         if ($result !== null) {
             return $result;

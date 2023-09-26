@@ -38,6 +38,10 @@ class SlideInviteSystem implements ShopItemInterface
     {
         // Guard against an invalid slide being passed
         $slide = $arguments[0];
+        $title = $arguments[1];
+        $description = $arguments[2];
+        $inviteeSlots = $arguments[3];
+        $entryFeeInCredits = $arguments[4];
 
         if (!$slide || !is_object($slide) || get_class($slide) !== Slide::class) {
             throw new \Exception('No slide passed to SlideInviteSystem::onUse! Please call a developer.');
@@ -53,10 +57,10 @@ class SlideInviteSystem implements ShopItemInterface
         $shopItemUser->data['slide_id'] = $slide->id;
 
         // TODO: Make this customizable:
-        $shopItemUser->data['invite_system_title'] = $slide->title;
-        $shopItemUser->data['invite_system_description'] = $slide->title;
-        //$shopItemUser->data['invite_system_invitee_slots'] = null;
-        $shopItemUser->data['invite_system_entry_fee_in_credits'] = 100;
+        $shopItemUser->data['invite_system_title'] = $title;
+        $shopItemUser->data['invite_system_description'] = $description;
+        $shopItemUser->data['invite_system_invitee_slots'] = !empty($inviteeSlots) ? $inviteeSlots : null;
+        $shopItemUser->data['invite_system_entry_fee_in_credits'] = $entryFeeInCredits;
 
         $slide->setData('invite_system_shop_item_user_id', $shopItemUser->id);
 

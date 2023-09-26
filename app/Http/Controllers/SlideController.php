@@ -183,6 +183,12 @@ class SlideController extends Controller
             ]);
         }
 
+        if ($shopItemUser->shopItem->unique_id !== 'slide_powerup_js') {
+            return redirect()->back()->withErrors([
+                'shop_item_user_id' => __('This item is not a JavaScript power up'),
+            ]);
+        }
+
         $slide = Slide::find($request->slide_id);
         $result = $shopItemUser->shopItem->callShopItemMethod('onUse', $shopItemUser, $slide);
 

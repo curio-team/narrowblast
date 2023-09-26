@@ -7,14 +7,16 @@
     @include('components.inputs.partials.label')
 @endif
 
-<textarea 
+<textarea
     id="{{ $name }}"
-    name="{{ $name }}" 
+    name="{{ $name }}"
     rows="3"
     {{ ($required ?? false) ? 'required' : '' }}
-    {{ $attributes->merge(['class' => 'form-control']) }}
+    {{ $attributes->class([
+        'p-2 border border-gray-300 rounded-md',
+    ]) }}
     autocomplete="off"
->{{$slot}}</textarea>
+>{{ $slot }}</textarea>
 
 @error($name)
     @include('components.inputs.partials.error')
