@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\InviteController;
+use App\Http\Controllers\JavascriptPowerupController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\SlideController;
 use Illuminate\Support\Facades\Route;
@@ -39,10 +40,10 @@ Route::prefix('/')
     Route::post('/slides/activate-new', [SlideController::class, 'activateNew'])->name('slides.activateNew');//->middleware('throttle:10,1');
     Route::post('/slides/{slide}/deactivate', [SlideController::class, 'deactivate'])->name('slides.deactivate');//->middleware('throttle:10,1');
 
-    Route::post('/slides/powerUpJavascript', [SlideController::class, 'powerUpJavascript'])->name('slides.powerUpJavascript');//->middleware('throttle:10,1');
+    Route::post('/slides/powerUpJavascript', [JavascriptPowerupController::class, 'powerUpJavascript'])->name('slides.powerUpJavascript');//->middleware('throttle:10,1');
 
     Route::post('/slides/inviteActivate', [InviteController::class, 'inviteActivate'])->name('slides.inviteActivate');//->middleware('throttle:10,1');
-    Route::get('/slides/inviteEnter', [InviteController::class, 'inviteEnter'])->name('slides.inviteEnter');//->middleware('throttle:10,1');
+    Route::get('/slides/inviteEnter/{inviteCode?}', [InviteController::class, 'inviteEnter'])->name('slides.inviteEnter');//->middleware('throttle:10,1');
     Route::post('/slides/inviteEnter', [InviteController::class, 'inviteProcess'])->name('slides.inviteProcess');//->middleware('throttle:10,1');
     Route::post('/slides/inviteConfirm', [InviteController::class, 'inviteConfirm'])->name('slides.inviteConfirm');//->middleware('throttle:10,1');
     Route::get('/slides/inviteeInteract/{inviteSystem}', [InviteController::class, 'inviteeInteract'])->name('slides.inviteeInteract');//->middleware('throttle:10,1');

@@ -7,6 +7,7 @@ use App\Models\ScreenSlide;
 use App\Models\ShopItem;
 use App\Models\ShopItemUser;
 use App\Models\Slide;
+use Filament\Notifications\Notification;
 use Illuminate\Contracts\Database\Query\Builder;
 
 #[ForShopItem('slide_powerup_js')]
@@ -49,10 +50,20 @@ class JavascriptSlide implements ShopItemInterface
         }
 
         // Check if the slide has already been used
-        if ($slide->data && $slide->data['has_javascript_powerup']) {
-            return redirect()->back()->withErrors([
-                'error' => 'This slide has already been powered up with JavaScript!',
-            ]);
+        if ($slide->data && isset($slide->data['has_javascript_powerup'])) {
+            Notification::make()
+                ->title(__('This slide has already been powered up with JavaScript!'))
+                ->danger()
+                ->send();
+            return redirect()->back();
+        }
+
+        if ($slide->data && isset($slide->data['invite_system_shop_item_user_id'])) {
+            Notification::make()
+                ->title(__('This slide has an invite system which automatically has JavaScript! So no need to power it up with JavaScript!'))
+                ->danger()
+                ->send();
+            return redirect()->back();
         }
 
         $shopItemUser->data['slide_ids'][] = $slide->id;

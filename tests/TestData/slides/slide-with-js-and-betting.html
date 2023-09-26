@@ -73,7 +73,7 @@
             </ul>
         </div>
         <div>
-            <h2>Invite Code: <span id="inviteCode"></span></h2>
+            <h2>Invite Code: <span id="inviteCode"></span><img id="inviteCodeQr" src="" /></h2>
             <h2>Prize Pool: <span id="prizePool"></span></h2>
             <h2>Invitees: <div id="inviteeList"></div></h2>
         </div>
@@ -114,6 +114,8 @@
                 document.querySelector('#inviteeList').innerHTML = '';
                 document.querySelector('#localWinner').classList.add('hidden');
                 document.querySelector('#slideInteraction img').classList.add('hidden');
+                document.querySelector('#inviteCode').innerHTML = '';
+                document.querySelector('#inviteCodeQr').src = '';
 
                 // Use postMessage to ask the parent window to send us the invite code
                 window.parent.postMessage({
@@ -162,7 +164,8 @@
             window.addEventListener('message', function(event) {
                 if (event.data.type === 'onInviteCode') {
                     // When we receive the invite code, update the invite code element
-                    document.querySelector('#inviteCode').innerText = event.data.data;
+                    document.querySelector('#inviteCode').innerText = event.data.data.inviteCode;
+                    document.querySelector('#inviteCodeQr').src = `${event.data.data.inviteCodeQr}`;
                 } else if (event.data.type === 'onInviteeJoin') {
                     // When a invitee joins update the invitee list
                     const invitee = event.data.data;

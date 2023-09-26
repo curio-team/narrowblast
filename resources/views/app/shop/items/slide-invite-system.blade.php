@@ -1,5 +1,6 @@
 <div>
-    <form action="{{ route('slides.inviteActivate') }}" method="post" class="flex flex-col gap-2 justify-stretch" x-data>
+    <form x-data action="{{ route('slides.inviteActivate') }}" method="post" class="flex flex-col gap-2 justify-stretch"
+        @submit.prevent="if(!window.forceSubmitInviteActivate) $dispatch('open-modal', { id: 'apply-invite-system' }); return false;">
         @csrf
         <input type="hidden" name="shop_item_user_id" value="{{ $shopItemUser->id }}">
         <div class="flex flex-col gap-2">
@@ -12,7 +13,7 @@
                         <label for="invite_system_unlimited_invitee_slots">Onbeperkt aantal slots</label>
                     </div>
                     <div x-show="!unlimitedInviteeSlots" class="flex flex-col gap-2" x-cloak>
-                        <x-inputs.number required
+                        <x-inputs.number x-bind:required="!unlimitedInviteeSlots"
                             name="invite_system_invitee_slots"
                             label="Aantal slots:"
                             x-effect="if (unlimitedInviteeSlots) { $el.value = '' } else { $el.value = 2 }"
@@ -38,7 +39,35 @@
                 @lang('crud.slides.invite_slide_activate')
             </x-buttons.primary>
         @else
-            Al gebruikt op slide: {{ $usedOnSlide->title }}.
+            Al gebruikt op slide: {{ $usedOnSlide->title }}. Koop een nieuw Invite Systeem om het op een andere slide te gebruiken.
         @endif
+
+        <x-filament::modal id="apply-invite-system">
+            <x-slot name="heading">
+                Invite Systeem Activeren
+            </x-slot>
+
+            <x-slot name="description">
+                Controleer je invoer goed, je kunt het Invite Systeem niet meer aanpassen nadat je het hebt geactiveerd.
+            </x-slot>
+
+            <p>
+                Wanneer je het Invite Systeem activeert, wordt het direct op de slide geplaatst. Je kunt het Invite Systeem niet meer aanpassen nadat je het hebt geactiveerd.
+                Je kunt ook geen andere slide meer selecteren voor dit systeem en <strong>de slide ook niet meer aanpassen</strong>
+            </p>
+            <p>
+                Zorg dat je goed getest hebt of het systeem werkt voordat je het activeert.
+            </p>
+            <p>
+                Weet je zeker dat je het Invite Systeem wilt activeren?
+            </p>
+            <x-filament::button color="danger" @click="window.forceSubmitInviteActivate = true; $el.closest('form').submit();">
+                Ja, activeer het Invite Systeem
+            </x-filament::button>
+
+            <x-filament::button color="gray" @click="$dispatch('close-modal', { id: 'apply-invite-system' })">
+                Nee ik wil het nog aanpassen
+            </x-filament::button>
+        </x-filament::modal>
     </form>
 </div>

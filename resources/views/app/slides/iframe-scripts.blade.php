@@ -73,8 +73,11 @@
             if (event.data.type === 'getInviteCode') {
                 // ! This is unreliable if we ever not have the id be the slide path
                 const slideId = window._narrowBlastPreviewSlideId ? window._narrowBlastPreviewSlideId : event.data.data.split('/').pop().split('.').shift();
-                requestInviteCode(slideId, function (publicPath, inviteCode) {
-                    sendPostMessageToRelevantIframe(publicPath, 'onInviteCode', inviteCode);
+                requestInviteCode(slideId, function (publicPath, inviteCode, inviteCodeQr) {
+                    sendPostMessageToRelevantIframe(publicPath, 'onInviteCode', {
+                        inviteCode: inviteCode,
+                        inviteCodeQr: inviteCodeQr,
+                    });
                 });
             } else if (event.data.type === 'requestRedistributePrizePool') {
                 requestRedistributePrizePool(event.data.data, function (publicPath, wasSuccesful) {
@@ -201,7 +204,7 @@
                 console.log(data);
 
                 setCurrentInviteCode(data.inviteCode);
-                callback(data.publicPath, data.inviteCode);
+                callback(data.publicPath, data.inviteCode, data.inviteCodeQr);
                 latestCsrfToken = data.csrfToken;
             })
             .catch(error => {

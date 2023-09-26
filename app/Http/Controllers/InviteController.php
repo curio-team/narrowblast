@@ -7,6 +7,15 @@ use App\Models\ShopItemUser;
 use App\Models\Slide;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule as ValidationRule;
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Label\Label;
+use Endroid\QrCode\Logo\Logo;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Writer\ValidationException;
 
 class InviteController extends Controller
 {
@@ -85,8 +94,17 @@ class InviteController extends Controller
     /**
      * Display the invite code entry page
      */
-    public function inviteEnter()
+    public function inviteEnter(string $inviteCode = null)
     {
+        // If we got here through a QR-code, we'll go straight through to the inviteProcess confirmation page
+        if ($inviteCode !== null) {
+            $inviteSystem = \App\Models\InviteSystem::where('latest_code', $inviteCode)->firstOrFail();
+
+            return view('app.slides.invite-confirm', [
+                'inviteSystem' => $inviteSystem,
+            ]);
+        }
+
         return view('app.slides.invite-enter');
     }
 
@@ -278,8 +296,27 @@ class InviteController extends Controller
             $slide->setData('invite_system_is_previewing_id', $inviteSystem->id);
         }
 
+        $writer = new PngWriter();
+
+        $qrCode = QrCode::create(route('slides.inviteEnter', $inviteSystem->latest_code))
+             ->setEncoding(new Encoding('UTF-8'))
+             ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
+             ->setSize(300)
+             ->setMargin(5)
+             ->setRoundBlockSizeMode(new RoundBlockSizeModeMargin())
+             ->setForegroundColor(new Color(0, 0, 0))
+             ->setBackgroundColor(new Color(255, 255, 255));
+
+        $logo = Logo::create(resource_path('images/emoji_rocket_1f680_padded.png'))
+            ->setResizeToWidth(50)
+            ->setPunchoutBackground(true);
+
+        $result = $writer->write($qrCode, $logo);
+        $qrCodeDataUri = $result->getDataUri();
+
         return response()->json([
             'inviteCode' => $inviteSystem->formatCode(),
+            'inviteCodeQr' => $qrCodeDataUri,
             'csrfToken' => csrf_token(),
             'publicPath' => $slide->getKnownUrl(),
         ]);

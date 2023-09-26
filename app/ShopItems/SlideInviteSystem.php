@@ -5,6 +5,7 @@ namespace App\ShopItems;
 use App\Models\ShopItem;
 use App\Models\ShopItemUser;
 use App\Models\Slide;
+use Filament\Notifications\Notification;
 use Illuminate\Contracts\Database\Query\Builder;
 
 #[ForShopItem('slide_invite_system')]
@@ -49,9 +50,11 @@ class SlideInviteSystem implements ShopItemInterface
 
         // Check if the slide has already been used
         if ($slide->data && isset($slide->data['invite_system_shop_item_user_id'])) {
-            return redirect()->back()->withErrors([
-                'error' => 'This slide has already has an invite system!',
-            ]);
+            Notification::make()
+                ->title(__('This slide has already has an invite system!'))
+                ->danger()
+                ->send();
+            return redirect()->back();
         }
 
         $shopItemUser->data['slide_id'] = $slide->id;
