@@ -47,12 +47,12 @@ Route::prefix('/')
     Route::post('/slides/inviteEnter', [InviteController::class, 'inviteProcess'])->name('slides.inviteProcess');//->middleware('throttle:10,1');
     Route::post('/slides/inviteConfirm', [InviteController::class, 'inviteConfirm'])->name('slides.inviteConfirm');//->middleware('throttle:10,1');
     Route::get('/slides/inviteeInteract/{inviteSystem}', [InviteController::class, 'inviteeInteract'])->name('slides.inviteeInteract');//->middleware('throttle:10,1');
-
-    Route::post('/slides/inviteCodeRequest', [InviteController::class, 'inviteCodeRequest'])->name('slides.inviteCodeRequest');//->middleware('throttle:10,1');
-    Route::post('/slides/inviteCodeUpdate', [InviteController::class, 'inviteCodeUpdate'])->name('slides.inviteCodeUpdate');//->middleware('throttle:10,1');
-    Route::post('/slides/inviteRedistributeRequest', [InviteController::class, 'inviteRedistributeRequest'])->name('slides.inviteRedistributeRequest');//->middleware('throttle:10,1');
-    Route::post('/slides/inviteRequestSetInteractionData', [InviteController::class, 'inviteRequestSetInteractionData'])->name('slides.inviteRequestSetInteractionData');//->middleware('throttle:10,1');
 });
+
+Route::post('/slides/inviteCodeRequest', [InviteController::class, 'inviteCodeRequest'])->name('slides.inviteCodeRequest');//->middleware('throttle:10,1');
+Route::post('/slides/inviteCodeUpdate', [InviteController::class, 'inviteCodeUpdate'])->name('slides.inviteCodeUpdate');//->middleware('throttle:10,1');
+Route::post('/slides/inviteRedistributeRequest', [InviteController::class, 'inviteRedistributeRequest'])->name('slides.inviteRedistributeRequest');//->middleware('throttle:10,1');
+Route::post('/slides/inviteRequestSetInteractionData', [InviteController::class, 'inviteRequestSetInteractionData'])->name('slides.inviteRequestSetInteractionData');//->middleware('throttle:10,1');
 
 Route::post('/screen/{screen}/tick', [SlideController::class, 'slideShowTick'])->name('slides.slideShowTick');
 Route::get('/screen/{screen}', [SlideController::class, 'slideShow'])->name('slides.slideShow');
