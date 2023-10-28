@@ -85,6 +85,14 @@ class SlideController extends Controller
     }
 
     /**
+     * Display a users slide upload page
+     */
+    public function upload()
+    {
+        return view('app.slides.upload');
+    }
+
+    /**
      * Activate a new slide for the user
      */
     public function activateNew(Request $request)

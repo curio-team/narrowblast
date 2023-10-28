@@ -35,6 +35,7 @@ Route::prefix('/')
     Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
     Route::get('/inventory', [ShopController::class, 'inventory'])->name('shop.inventory');
     Route::get('/slides', [SlideController::class, 'manage'])->name('slides.manage');
+    Route::get('/slides/upload', [SlideController::class, 'upload'])->name('slides.upload');
 
     Route::get('/slides/{slide}/tmp-preview/', [SlideController::class, 'preview'])->name('slides.preview');//->middleware('throttle:10,1');
     Route::post('/slides/activate-new', [SlideController::class, 'activateNew'])->name('slides.activateNew');//->middleware('throttle:10,1');

@@ -20,12 +20,15 @@
     <x-card x-cloak x-show="$wire.tab == 1">
         <x-stack-layout>
             <p>
-                Dit zijn de slides die je hebt geupload, maar nog niet hebt ingediend voor goedkeuring. Je kunt ze alvast bekijken of verwijderen als je wilt.
+                Dit zijn de slides die je hebt geupload, maar nog niet hebt ingediend voor goedkeuring. Je kunt ze alvast bekijken of verwijderen als je wilt. Wanneer je klaar bent met testen kun je ze indienen voor goedkeuring.
             </p>
             <p>
-                Wanneer je klaar bent met testen kun je ze indienen voor goedkeuring.
+                Op dit moment kun je slides niet bewerken.
             </p>
             @livewire('list-slides', ['isApproved' => false, 'isFinalized' => false])
+            <x-buttons.primary href="{{ route('slides.upload') }}">
+                @lang('app.slide_upload')
+            </x-buttons.primary>
         </x-stack-layout>
     </x-card>
 

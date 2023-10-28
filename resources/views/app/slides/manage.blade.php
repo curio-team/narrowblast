@@ -15,16 +15,6 @@
             </x-stack-layout>
         </x-card>
 
-        <x-headings.area>
-            @lang('app.slide_upload')
-        </x-headings.area>
-
-        <x-card>
-            <x-stack-layout>
-                @livewire('upload-slide')
-            </x-stack-layout>
-        </x-card>
-
         @livewire('slide-switcher')
     </x-stack-layout>
 </x-app-layout>
