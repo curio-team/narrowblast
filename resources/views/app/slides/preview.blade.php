@@ -18,11 +18,13 @@
                 <x-inputs.checkbox name="has_javascript_powerup" label="With Javascript Powerup" x-model="has_javascript_powerup" />
             </li>
             <li class="flex flex-col gap-2">
+                @if(!config('app.disable_invite_system') || auth()->user()->isSuperAdmin())
                 <x-inputs.checkbox name="ask_for_invite_system" label="Invite System" x-model="enable_invite_system" />
                 <div x-cloak class="flex flex-col pl-4" x-show="enable_invite_system">
                     <p>Ga naar <a href="{{ route('slides.inviteEnter') }}" target="_blank" class="underline">het scherm om uitnodigingscodes in te voeren</a> en vul de code in.</p>
                     <p>Alleen in deze preview staat het systeem toe dat je zelf meerdere keren dezelfde code gebruikt</p>
                 </div>
+                @endif
             </li>
         </ul>
     </div>

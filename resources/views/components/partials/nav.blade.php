@@ -60,7 +60,7 @@
                             <x-buttons.link href="{{ route('slides.manage') }}" icon="presentation-chart-bar" center>
                                 @lang('app.slides_manage')
                             </x-buttons.link>
-                            @if(!config('app.disable_invite_system'))
+                            @if(!config('app.disable_invite_system') || auth()->user()->isSuperAdmin())
                             <x-buttons.link href="{{ route('slides.inviteEnter') }}" icon="qr-code" center>
                                 @lang('app.enter_invite_code')
                             </x-buttons.link>
@@ -92,8 +92,7 @@
                 <x-buttons.link href="{{ route('slides.manage') }}" icon="presentation-chart-bar">
                     @lang('app.slides_manage')
                 </x-buttons.link>
-                @if(!config('app.disable_invite_system'))
-                <x-buttons.link href="{{ route('slides.inviteEnter') }}" icon="qr-code">
+                @if(!config('app.disable_invite_system') || auth()->user()->isSuperAdmin())                <x-buttons.link href="{{ route('slides.inviteEnter') }}" icon="qr-code">
                     @lang('app.enter_invite_code')
                 </x-buttons.link>
                 @endif

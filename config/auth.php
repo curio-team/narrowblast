@@ -1,7 +1,10 @@
 <?php
 
 return [
-    'super_admins' => ['admin@admin.com'],
+    'super_admins' => [
+        'tl10@curio.nl',
+        'bk28@curio.nl',
+    ],
 
     /*
     |--------------------------------------------------------------------------
