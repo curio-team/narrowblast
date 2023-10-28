@@ -30,8 +30,9 @@
                 @guest
                     <x-buttons.link href="{{ route('login') }}">{{ __('Login') }}</x-buttons.link>
                 @else
-                    <x-stack-layout class="items-stretch md:items-center flex-col md:flex-row">
+                    <x-stack-layout class="items-stretch text-center flex-col md:flex-row">
                         <x-buttons.link
+                            center
                             target="_blank"
                             href="{{ url('https://login.curio.codes') }}">
                             {{ Auth::user()->name }} <span class="caret"></span>
@@ -44,7 +45,7 @@
                         <form action="{{ route('logout') }}"
                             method="POST">
                             @csrf
-                            <x-buttons.primary submit>
+                            <x-buttons.primary submit class="w-full">
                                 {{ __('Logout') }}
                             </x-buttons.primary>
                         </form>
@@ -59,9 +60,11 @@
                             <x-buttons.link href="{{ route('slides.manage') }}" icon="presentation-chart-bar" center>
                                 @lang('app.slides_manage')
                             </x-buttons.link>
+                            @if(!config('app.disable_invite_system'))
                             <x-buttons.link href="{{ route('slides.inviteEnter') }}" icon="qr-code" center>
                                 @lang('app.enter_invite_code')
                             </x-buttons.link>
+                            @endif
                             @if(Auth::user()->isSuperAdmin())
                             <x-buttons.link href="{{ route('filament.admin.pages.dashboard') }}"
                                 center
@@ -89,9 +92,11 @@
                 <x-buttons.link href="{{ route('slides.manage') }}" icon="presentation-chart-bar">
                     @lang('app.slides_manage')
                 </x-buttons.link>
+                @if(!config('app.disable_invite_system'))
                 <x-buttons.link href="{{ route('slides.inviteEnter') }}" icon="qr-code">
                     @lang('app.enter_invite_code')
                 </x-buttons.link>
+                @endif
                 @if(Auth::user()->isSuperAdmin())
                 <x-buttons.link href="{{ route('filament.admin.pages.dashboard') }}"
                     icon="lock-closed"

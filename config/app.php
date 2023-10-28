@@ -39,6 +39,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | App Feature Settings
+    |--------------------------------------------------------------------------
+    |
+    | disable_invite_system:
+    |       The invite system can be used by slide creators to build a slide
+    |       where other people can join through an invite code or QR-code.
+    |       This setting can be used to disable this feature.
+    */
+    'disable_invite_system' => env('DISABLE_INVITE_SYSTEM', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |
