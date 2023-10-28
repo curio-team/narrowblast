@@ -47,8 +47,8 @@
                     <li>
                         Gebruik deze voorbeeld slides ter referentie:
                         <ul class="list-disc pl-4 flex flex-col">
-                            <li><x-buttons.link :href="Vite::asset('resources/examples/slide-emoji.html')" target="_blank" download>simple emoji slide</x-buttons.link></li>
-                            <li><x-buttons.link :href="Vite::asset('resources/examples/slide-explainer.html')" target="_blank" download>explainer slide</x-buttons.link></li>
+                            <li><x-buttons.link :href="asset('examples/slide-emoji.html')" target="_blank" download="example.html">simple emoji slide</x-buttons.link></li>
+                            <li><x-buttons.link :href="asset('examples/slide-explainer.html')" target="_blank" download="example.html">explainer slide</x-buttons.link></li>
                         </ul>
                     </li>
                 </ul>
