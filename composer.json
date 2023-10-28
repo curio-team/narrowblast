@@ -6,6 +6,8 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "barryvdh/laravel-dompdf": "^2.0",
+        "danharrin/livewire-rate-limiting": "^1.2",
         "endroid/qr-code": "^4.8",
         "filament/filament": "^3.0-stable",
         "guzzlehttp/guzzle": "^7.2",

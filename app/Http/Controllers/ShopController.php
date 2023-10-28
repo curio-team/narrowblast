@@ -23,4 +23,14 @@ class ShopController extends Controller
 
         return view('app.shop.inventory', compact('items'));
     }
+
+    /**
+     * Display the credits a user owns, and allow them to claim more with a code
+     */
+    public function credits()
+    {
+        $credits = auth()->user()->getFormattedCredits();
+
+        return view('app.shop.credits', compact('credits'));
+    }
 }

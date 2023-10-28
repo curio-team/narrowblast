@@ -31,24 +31,25 @@ Route::get('/amoclient/ready', function(){
 Route::prefix('/')
     ->middleware('auth')
     ->group(function () {
+        Route::get('/credits', [ShopController::class, 'credits'])->name('shop.credits');
 
-    Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
-    Route::get('/inventory', [ShopController::class, 'inventory'])->name('shop.inventory');
-    Route::get('/slides', [SlideController::class, 'manage'])->name('slides.manage');
-    Route::get('/slides/upload', [SlideController::class, 'upload'])->name('slides.upload');
+        Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+        Route::get('/inventory', [ShopController::class, 'inventory'])->name('shop.inventory');
+        Route::get('/slides', [SlideController::class, 'manage'])->name('slides.manage');
+        Route::get('/slides/upload', [SlideController::class, 'upload'])->name('slides.upload');
 
-    Route::get('/slides/{slide}/tmp-preview/', [SlideController::class, 'preview'])->name('slides.preview');//->middleware('throttle:10,1');
-    Route::post('/slides/activate-new', [SlideController::class, 'activateNew'])->name('slides.activateNew');//->middleware('throttle:10,1');
-    Route::post('/slides/{slide}/deactivate', [SlideController::class, 'deactivate'])->name('slides.deactivate');//->middleware('throttle:10,1');
+        Route::get('/slides/{slide}/tmp-preview/', [SlideController::class, 'preview'])->name('slides.preview');//->middleware('throttle:10,1');
+        Route::post('/slides/activate-new', [SlideController::class, 'activateNew'])->name('slides.activateNew');//->middleware('throttle:10,1');
+        Route::post('/slides/{slide}/deactivate', [SlideController::class, 'deactivate'])->name('slides.deactivate');//->middleware('throttle:10,1');
 
-    Route::post('/slides/powerUpJavascript', [JavascriptPowerupController::class, 'powerUpJavascript'])->name('slides.powerUpJavascript');//->middleware('throttle:10,1');
+        Route::post('/slides/powerUpJavascript', [JavascriptPowerupController::class, 'powerUpJavascript'])->name('slides.powerUpJavascript');//->middleware('throttle:10,1');
 
-    Route::post('/slides/inviteActivate', [InviteController::class, 'inviteActivate'])->name('slides.inviteActivate');//->middleware('throttle:10,1');
-    Route::get('/slides/inviteEnter/{inviteCode?}', [InviteController::class, 'inviteEnter'])->name('slides.inviteEnter');//->middleware('throttle:10,1');
-    Route::post('/slides/inviteEnter', [InviteController::class, 'inviteProcess'])->name('slides.inviteProcess');//->middleware('throttle:10,1');
-    Route::post('/slides/inviteConfirm', [InviteController::class, 'inviteConfirm'])->name('slides.inviteConfirm');//->middleware('throttle:10,1');
-    Route::get('/slides/inviteeInteract/{inviteSystem}', [InviteController::class, 'inviteeInteract'])->name('slides.inviteeInteract');//->middleware('throttle:10,1');
-});
+        Route::post('/slides/inviteActivate', [InviteController::class, 'inviteActivate'])->name('slides.inviteActivate');//->middleware('throttle:10,1');
+        Route::get('/slides/inviteEnter/{inviteCode?}', [InviteController::class, 'inviteEnter'])->name('slides.inviteEnter');//->middleware('throttle:10,1');
+        Route::post('/slides/inviteEnter', [InviteController::class, 'inviteProcess'])->name('slides.inviteProcess');//->middleware('throttle:10,1');
+        Route::post('/slides/inviteConfirm', [InviteController::class, 'inviteConfirm'])->name('slides.inviteConfirm');//->middleware('throttle:10,1');
+        Route::get('/slides/inviteeInteract/{inviteSystem}', [InviteController::class, 'inviteeInteract'])->name('slides.inviteeInteract');//->middleware('throttle:10,1');
+    });
 
 Route::post('/slides/inviteCodeRequest', [InviteController::class, 'inviteCodeRequest'])->name('slides.inviteCodeRequest');//->middleware('throttle:10,1');
 Route::post('/slides/inviteCodeUpdate', [InviteController::class, 'inviteCodeUpdate'])->name('slides.inviteCodeUpdate');//->middleware('throttle:10,1');

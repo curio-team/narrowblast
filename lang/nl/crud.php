@@ -24,6 +24,8 @@ return [
     ],
 
     'user' => [
+        'your_credits' => 'Jouw credits',
+        'claim_credits' => 'Credits claimen via code',
         'change_in_credits' => 'De credits van ":user" veranderen met:',
         'change_in_credits_description' => 'Bij positieve waarde worden credits toegevoegd, bij negatieve waarde worden credits afgetrokken.',
         'change_credits' => 'credits veranderen',

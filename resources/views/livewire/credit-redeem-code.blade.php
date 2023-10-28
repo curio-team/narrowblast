@@ -1,9 +1,9 @@
 <div>
-    <form wire:submit="create" class="flex flex-col gap-4">
+    <form wire:submit="redeem" class="flex flex-col gap-4">
         {{ $this->form }}
 
         <x-buttons.primary submit>
-            Upload
+            Redeem
         </x-buttons.primary>
     </form>
 
