@@ -41,7 +41,6 @@ When we've been up and running for a couple months, we'll add the following feat
     * Polls
     * ... and more
 
-
 ## 🛠 Getting Started
 
 ### Local development
@@ -96,3 +95,11 @@ On production you should just enable HTTPS.
 </VirtualHost>
 ```
 
+## 🤝 Contributing
+
+We work with [the GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow), so all code changes happen through pull requests. Pull requests are the best way to propose changes to the codebase. We actively welcome your pull requests:
+
+1. Fork the repo and create your branch from `main`.
+2. Make your changes and commit them to your fork.
+3. Create a pull request to the `main` branch of this repo.
+4. We will review your pull request and merge it if it is approved.
