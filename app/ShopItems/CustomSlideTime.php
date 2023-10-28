@@ -8,6 +8,7 @@ use App\Models\ShopItem;
 use App\Models\ShopItemUser;
 use App\Models\Slide;
 
+#[ForShopItem('slide_1d')]
 #[ForShopItem('slide_7d')]
 #[ForShopItem('slide_14d')]
 class CustomSlideTime implements ShopItemInterface
@@ -18,6 +19,7 @@ class CustomSlideTime implements ShopItemInterface
     public static function onPurchase(ShopItem $shopItem, ShopItemUser $shopItemUser): void
     {
         $shopItemUser->data['time_total_in_seconds'] = match ($shopItem->unique_id) {
+            'slide_1d' => 1 * 24 * 60 * 60,
             'slide_7d' => 7 * 24 * 60 * 60,
             'slide_14d' => 14 * 24 * 60 * 60,
         };

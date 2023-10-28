@@ -24,7 +24,7 @@ class ShopItemSeeder extends Seeder
                 'description' => 'Presenteer 14 dagen lang een eigen gemaakte \'slide\' op NarrowBlast! Gebruik HTML en CSS om een webpagina te maken en upload die naar ons platform. Iedereen die langs de NarrowBlast loopt zal jouw slide zien. Jouw slide wordt eerst gecontroleerd alvorens deze wordt getoond.',
                 'image_path' => 'presentation.png',
                 'unique_id' => 'slide_14d',
-                'cost_in_credits' => 100,
+                'cost_in_credits' => 115,
             ],
             [
                 'name' => 'Custom Slide (7 dagen)',
@@ -32,6 +32,13 @@ class ShopItemSeeder extends Seeder
                 'image_path' => 'presentation.png',
                 'unique_id' => 'slide_7d',
                 'cost_in_credits' => 75,
+            ],
+            [
+                'name' => 'Custom Slide (1 dagen)',
+                'description' => 'Presenteer 1 dag lang een eigen gemaakte \'slide\' op NarrowBlast! Gebruik HTML en CSS om een webpagina te maken en upload die naar ons platform. Iedereen die langs de NarrowBlast loopt zal jouw slide zien. Jouw slide wordt eerst gecontroleerd alvorens deze wordt getoond.',
+                'image_path' => 'presentation.png',
+                'unique_id' => 'slide_1d',
+                'cost_in_credits' => 15,
             ],
             [
                 'name' => 'Javascript Slide Power-up',
@@ -46,7 +53,7 @@ class ShopItemSeeder extends Seeder
                 'image_path' => 'betting.png',
                 'unique_id' => 'slide_invite_system',
                 'cost_in_credits' => 5000,
-                'required_type' => 'teacher', // wip
+                'required_type' => 'teacher', // Disabled since this is a work in progress (still needs testing, and cleaning up of the UX/UI)
             ],
         ];
 
