@@ -12,12 +12,13 @@ if (document.querySelector('.reveal')) {
     const reveal = new Reveal({
         plugins: [Markdown],
 
-        autoSlide: 5000,
+        autoSlide: 15000,
         autoSlideStoppable: false,
         loop: true,
         preloadIframes: true, // data-src will be loaded when within view distance: 3 by default (or 2 for mobile)
 
         controls: false,
+        autoAnimate: false,
         // progress: false,
     });
 
