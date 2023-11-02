@@ -19,6 +19,7 @@ if (document.querySelector('.reveal')) {
 
         controls: false,
         autoAnimate: false,
+        backgroundTransition: 'none',
         // progress: false,
     });
 
