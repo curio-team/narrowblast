@@ -12,7 +12,7 @@ if (document.querySelector('.reveal')) {
     const reveal = new Reveal({
         plugins: [Markdown],
 
-        autoSlide: 15000,
+        autoSlide: 5000,
         autoSlideStoppable: false,
         loop: true,
         preloadIframes: true, // data-src will be loaded when within view distance: 3 by default (or 2 for mobile)
@@ -36,6 +36,17 @@ if (document.querySelector('.reveal')) {
         return element;
     };
     // ! End of Workaround
+
+    // Go through all video elements in the slide, restarting them
+    reveal.on('slidechanged', event => {
+        const slide = event.currentSlide;
+        const slideContainer = slide.parentNode;
+        const indexInParent = Array.prototype.indexOf.call(slideContainer.children, slide);
+        const backgroundContainer = slideContainer.parentNode.querySelector('.backgrounds');
+        const background = backgroundContainer.children[indexInParent];
+        const backgroundIframe = background.querySelector('iframe');
+        backgroundIframe.src = backgroundIframe.src;
+    });
 
     reveal.initialize();
 

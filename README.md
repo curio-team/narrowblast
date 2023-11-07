@@ -87,10 +87,10 @@ On production you should just enable HTTPS.
 <VirtualHost _default_:443>
     ...
     # Ensure this Directory points to the symlink path apache follows (and not the actual storage directory)
-    <Directory /var/www/html/narrowblast/public/storage/>
-            <IfModule mod_headers.c>
-                Header set Access-Control-Allow-Origin "*"
-            </IfModule>
+    <Directory /var/www/html/narrowblast-usercontent/public/storage/>
+        <IfModule mod_headers.c>
+            Header set Access-Control-Allow-Origin "*"
+        </IfModule>
     </Directory>
     ...
 </VirtualHost>

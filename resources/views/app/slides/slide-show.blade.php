@@ -79,7 +79,7 @@
 
                 if(!hasLoaded) {
                     hasLoaded = true;
-                    clearSlides();
+                    window.clearSlides();
                 }
 
                 updateSlideChanges(data.slides);
