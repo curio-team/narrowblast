@@ -59,7 +59,7 @@ class User extends Authenticatable implements FilamentUser
      */
     public function slides()
     {
-        return $this->hasMany(Slide::class, 'user_id');
+        return $this->hasMany(Slide::class);
     }
 
     /**
@@ -67,7 +67,7 @@ class User extends Authenticatable implements FilamentUser
      */
     public function approvedSlides()
     {
-        return $this->hasMany(Slide::class, 'approver_id');
+        return $this->hasMany(Slide::class);
     }
 
     /**
