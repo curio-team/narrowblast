@@ -46,8 +46,9 @@ When we've been up and running for a couple months, we'll add the following feat
 ### Local development
 * Clone this repository
 * Run the following commands in the root of that repo:
-    * `composer install`
     * `npm install`
+    * `npm run dev`
+    * `composer install`
     * Create and configure the `.env` file:
         * Fill `AMO_CLIENT_ID` and `AMO_CLIENT_SECRET` with the correct (secret) app secrets for the [amoclient OpenID auth](https://github.com/StudioKaa/amoclient)
         * Fill `SLIDE_SHOW_SECRET_TICK_KEY` with a random secret string. This is used to prevent spamming of the slideshow tick endpoint. When setting up a narrowcasting screen you will have to enter this.
@@ -55,8 +56,8 @@ When we've been up and running for a couple months, we'll add the following feat
         * Fill `USER_CONTENT_URL` with the URL to the directory where uploaded files should be accessible from. This domain should be different from the domain where the website is hosted. This is to prevent XSS attacks.
         * Set `DISABLE_INVITE_SYSTEM` to `true` to disable the invite system. We will enable this at a later stage.
     * `php artisan storage:link` (needed for shop images)
+    * `php artisan key:generate`
     * `php artisan migrate --seed` (The seeder automatically adds the shop items and 1 screen)
-    * `npm run watch`
     * `php artisan serve`
 
 The website is now available for:

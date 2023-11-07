@@ -30,7 +30,9 @@ class ListSlides extends Component implements HasForms, HasTable
 
     public function table(Table $table): Table
     {
-        $query = Slide::query();
+        /** @var \App\Models\User */
+        $user = auth()->user();
+        $query = $user->slides()->getQuery();
 
         if ($this->isApproved) {
             $query->whereNotNull('approved_at');
