@@ -64,6 +64,11 @@ class SlideController extends Controller
                 if ($result !== false) {
                     $slides[] = [
                         'publicPath' => $screenSlide->slide->getKnownUrl(),
+                        'creator' => [
+                            'name' => $screenSlide->slide->user->name,
+                            // TODO: Avatar
+                            'initials' => $screenSlide->slide->user->getInitials(),
+                        ],
                         'data' => $screenSlide->slide->data ?? [],
                     ];
                 }

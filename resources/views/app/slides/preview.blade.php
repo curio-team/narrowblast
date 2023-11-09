@@ -29,12 +29,17 @@
         </ul>
     </div>
 
+    @include('app.slides.slide-creator')
+
     @include('app.slides.iframe-scripts')
 
     <script>
         const slideBackgroundContainerEl = document.querySelector('.reveal');
 
         window._narrowBlastPreviewSlideId = '{{ $slide->id }}';
+
+        const slideCreator = document.getElementById('slideCreator');
+        slideCreator.classList.remove('opacity-0');
 
         function getIframe() {
             return slideBackgroundContainerEl.querySelector('iframe');

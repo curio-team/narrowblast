@@ -48,6 +48,18 @@ class User extends Authenticatable implements FilamentUser
         return number_format($this->credits, 0, ',', '.');
     }
 
+    public function getInitials()
+    {
+        $words = explode(' ', $this->name);
+        $initials = '';
+
+        foreach ($words as $word) {
+            $initials .= strtoupper($word[0]);
+        }
+
+        return $initials;
+    }
+
     /**
      *
      * Relationships

@@ -1,10 +1,6 @@
 <x-common-layout>
     <div class="reveal">
         <div class="slides" id="slideContainer">
-            {{-- @foreach ($screenSlides as $screenSlide)
-                <section data-background-iframe="{{ $screenSlide->slide->getKnownPath() }}">
-                </section>
-            @endforeach --}}
             <section role="status" data-background-gradient="linear-gradient(to bottom right, #2D4747, #000000)">
                 <div class="grid place-items-center w-full h-full gap-2">
                     <svg aria-hidden="true" class="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -16,6 +12,8 @@
             </section>
         </div>
     </div>
+
+    @include('app.slides.slide-creator')
 
     @include('app.slides.iframe-scripts')
 
