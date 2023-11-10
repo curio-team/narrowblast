@@ -79,6 +79,11 @@ class ImportAttendance extends Page
                 foreach (file($file->getRealPath()) as $line) {
                     $line = str_getcsv($line, ',', '"');
 
+                    // If it's an empty line, skip it.
+                    if (count($line) === 0) {
+                        continue;
+                    }
+
                     // Skip the first line, which contains the column names.
                     if (self::getLineColumnByName($line, 'groep_code') === 'groep_code') {
                         $hasStarted = true;
