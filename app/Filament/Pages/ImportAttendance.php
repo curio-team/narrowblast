@@ -80,7 +80,7 @@ class ImportAttendance extends Page
                     $line = str_getcsv($line, ',', '"');
 
                     // If it's an empty line, skip it.
-                    if (count($line) === 0) {
+                    if (count($line) <= 1) {
                         continue;
                     }
 
