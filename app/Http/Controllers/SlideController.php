@@ -65,7 +65,7 @@ class SlideController extends Controller
                     $slides[] = [
                         'publicPath' => $screenSlide->slide->getKnownUrl(),
                         'creator' => [
-                            'name' => $screenSlide->slide->user->name,
+                            'name' => explode(' ', $screenSlide->slide->user->name)[0],
                             // TODO: Avatar
                             'initials' => $screenSlide->slide->user->getInitials(),
                         ],
