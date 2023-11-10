@@ -28,6 +28,19 @@ class ImportAttendance extends Page
         return preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $line[array_search($name, self::CSV_COLUMNS)]);
     }
 
+    private static function findUser(string $id): ?User {
+        $prefixes = ['d', 'i'];
+
+        foreach ($prefixes as $prefix) {
+            $user = User::where('id', $prefix . $id)->first();
+            if ($user !== null) {
+                return $user;
+            }
+        }
+
+        return null;
+    }
+
     public function importAction(): Action
     {
         // Aantal_registraties_per_persoon_van_groep2.csv example data:
@@ -40,17 +53,6 @@ class ImportAttendance extends Page
         // TTSDB-sd4o23a,Isabella Davis,203186,Regulier absent,0,0.00,13.75
         // TTSDB-sd4o23a,Isabella Davis,203186,Te laat,,,13.75
         // TTSDB-sd4o23a,Isabella Davis,203186,Ziek,0,0.00,13.75
-        // TTSDB-sd4o23a,Emily Wilson,191677,Present,10,13.57,13.75
-        // TTSDB-sd4o23a,Emily Wilson,191677,Regulier absent,0,0.00,13.75
-        // TTSDB-sd4o23a,Emily Wilson,191677,Te laat,1,0.18,13.75
-        // TTSDB-sd4o23a,Emily Wilson,191677,Ziek,0,0.00,13.75
-        // TTSDB-sd4o23a,William Taylor,203802,Present,10,13.75,13.75
-        // TTSDB-sd4o23a,William Taylor,203802,Regulier absent,0,0.00,13.75
-        // TTSDB-sd4o23a,William Taylor,203802,Te laat,,,13.75
-        // TTSDB-sd4o23a,William Taylor,203802,Ziek,0,0.00,13.75
-        // TTSDB-sd4o23a,Emma Brown,204900,Present,10,13.75,14.75
-        // TTSDB-sd4o23a,Emma Brown,204900,Regulier absent,2,1.00,14.75
-        // TTSDB-sd4o23a,Emma Brown,204900,Te laat,,,14.75
         return Action::make('import')
             ->form([
                 Forms\Components\FileUpload::make('file')
@@ -126,10 +128,10 @@ class ImportAttendance extends Page
                 // Create a query that upserts the users, adding to their credits, or creating the users if they dont exist. Their type will be student and their email is 'd<theirid>@curio.nl'.
                 \DB::transaction(function() use ($users) {
                     foreach ($users as $userData) {
-                        $user = User::find($userData['id']);
+                        $user = static::findUser($userData['id']);
 
                         if ($user === null) {
-                            // Let's not do this for now. Just let users be created when they log in and then start earning credits.
+                            // Let's not create a user for now. Just let users be created when they log in and then start earning credits.
                             // $user = new User();
                             // $user->name = $userData['name'];
                             // $user->email = 'd' . $userData['id'] . '@curio.nl';
