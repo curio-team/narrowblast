@@ -22,6 +22,14 @@ class ListShopItems extends Component implements HasForms, HasTable
     use InteractsWithForms;
     use InteractsWithTable;
 
+    public $record;
+
+    public function mount() {
+        $this->record = ShopItem::whereNull('required_type')
+                                    ->orWhere('required_type', auth()->user()->type)
+                                    ->get();
+    }
+
     public function table(Table $table): Table
     {
         $query = ShopItem::query()
