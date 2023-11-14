@@ -79,7 +79,8 @@ class User extends Authenticatable implements FilamentUser
      */
     public function approvedSlides()
     {
-        return $this->hasMany(Slide::class);
+        return $this->hasMany(Slide::class)
+            ->whereNotNull('approved_at');
     }
 
     /**
