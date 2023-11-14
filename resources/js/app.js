@@ -48,6 +48,16 @@ if (document.querySelector('.reveal')) {
         backgroundIframe.src = backgroundIframe.src;
     });
 
+    reveal.on('slidetransitionend', event => {
+        const slide = event.currentSlide;
+        const allSlides = reveal.getSlides();
+
+        window.revolutionCounter = window.revolutionCounter || 0;
+        if (slide === allSlides[allSlides.length - 1] && window.revolutionCounter++ > 2) {
+            window.location.reload();
+        }
+    });
+
     reveal.initialize();
 
     window.RevealDeck = reveal;
