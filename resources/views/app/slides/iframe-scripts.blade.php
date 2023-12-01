@@ -20,6 +20,32 @@
         }
         window.setCurrentInviteCode = setCurrentInviteCode;
 
+        function updateSlideCreator(slide) {
+            const slideCreator = document.getElementById('slideCreator');
+            const slideCreatorInitials = document.getElementById('slideCreatorInitials');
+            const slideCreatorName = document.getElementById('slideCreatorName');
+
+            if (slide.dataset.creatorInitials) {
+                slideCreatorInitials.innerText = slide.dataset.creatorInitials;
+            } else {
+                slideCreatorInitials.innerText = '';
+            }
+
+            if (slide.dataset.creatorName) {
+                slideCreatorName.innerText = slide.dataset.creatorName;
+            } else {
+                slideCreatorName.innerText = '';
+            }
+
+            slideCreator.classList.remove('opacity-0');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            window.RevealDeck.on('slidechanged', function(event) {
+                updateSlideCreator(event.currentSlide);
+            });
+        });
+
         // Apply maximum sandbox by default and check (once the src has been applied) if the iframe should be sandboxed
         document.addEventListener('iframecreated', function (event) {
             const iframe = event.detail;
@@ -106,7 +132,19 @@
         window.clearSlides = clearSlides;
 
         function addSlide(slide) {
-            slideContainerEl.innerHTML += `<section data-background-iframe="${slide.publicPath}"></section>`;
+            let elementData = [];
+            elementData["data-background-iframe"] = slide.publicPath;
+            elementData["data-creator-name"] = slide.creator.name;
+            // TODO: Avatar
+            elementData["data-creator-initials"] = slide.creator.initials;
+
+            const section = document.createElement('section');
+
+            for (const [key, value] of Object.entries(elementData)) {
+                section.setAttribute(key, value);
+            }
+
+            slideContainerEl.appendChild(section);
 
             if (slide.data.has_javascript_powerup) {
                 setRouteJavascriptPowerup(slide.publicPath, true);
