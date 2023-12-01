@@ -204,9 +204,34 @@
 
         // Function to create a password modal for user interaction
         function passwordModal(message, callback) {
-            // Creating modal elements and setting their attributes and classes
-            // ... (element creation and attribute/class setting code)
-            // Adding event listener to handle modal submission and callback execution
+            const modal = document.createElement('div');
+            modal.classList.add('fixed', 'top-0', 'left-0', 'w-screen', 'h-screen', 'flex', 'justify-center', 'items-center', 'bg-black', 'bg-opacity-50', 'z-50');
+
+            const modalContent = document.createElement('div');
+            modalContent.classList.add('bg-white', 'p-4', 'rounded', 'shadow-lg', 'text-center', 'flex', 'flex-col', 'gap-4');
+
+            const modalMessage = document.createElement('span');
+            modalMessage.innerText = message;
+
+            const modalInput = document.createElement('input');
+            modalInput.setAttribute('type', 'password');
+            modalInput.classList.add('border', 'border-gray-300', 'rounded', 'p-2');
+
+            const modalSubmit = document.createElement('button');
+            modalSubmit.classList.add('bg-blue-500', 'text-white', 'rounded', 'p-2', 'hover:bg-blue-600', 'transition-colors', 'duration-200', 'ease-in-out');
+            modalSubmit.innerText = 'Submit';
+
+            modalSubmit.addEventListener('click', function() {
+                modal.remove();
+                localStorage.setItem('secretTickKey', modalInput.value);
+                callback(modalInput.value);
+            });
+
+            modalContent.appendChild(modalMessage);
+            modalContent.appendChild(modalInput);
+            modalContent.appendChild(modalSubmit);
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
         }
         window.passwordModal = passwordModal; // Making the function accessible globally
 
@@ -266,7 +291,7 @@
                     console.log(data); // Logging the received data
 
                     setCurrentInviteCode(data.inviteCode); // Setting the current invite code
-                    callback(data.publicPath, data.inviteCode, data
+                    callback(data.publicPath, data.inviteCode, data // Stan was here
                         .inviteCodeQr); // Executing the callback with received data
                     latestCsrfToken = data.csrfToken; // Updating the latest CSRF token
                 })
