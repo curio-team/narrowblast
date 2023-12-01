@@ -11,6 +11,7 @@
         const routesData = new Map();
         const routesIframes = new Map();
         const slideInteractionTime = new Map(); // Map to store last interaction time for each slide
+        // TODO: Make this configurable
         const slideInteractionTimeout = 25000; // Timeout for slide interaction in milliseconds
         let inviteCode = null;
 
