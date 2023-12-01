@@ -21,6 +21,8 @@
         const routesWithJavascript = new Map();
         const routesData = new Map();
         const routesIframes = new Map();
+        const slideInteractionTime = new Map(); // Map to store last interaction time for each slide
+        const slideInteractionTimeout = 25000; // Timeout for slide interaction in milliseconds
         let inviteCode = null;
 
         // Function to set the current invite code
@@ -127,6 +129,9 @@
             // Checking if invite system is enabled
             if (!window.enable_invite_system) return;
 
+            // Update last interaction time
+            slideInteractionTime.set(event.data.publicPath, Date.now());
+
             // Handling different message types received from iframes
             if (event.data.type === 'getInviteCode') {
                 // Obtaining slide ID and requesting an invite code
@@ -205,10 +210,12 @@
         // Function to create a password modal for user interaction
         function passwordModal(message, callback) {
             const modal = document.createElement('div');
-            modal.classList.add('fixed', 'top-0', 'left-0', 'w-screen', 'h-screen', 'flex', 'justify-center', 'items-center', 'bg-black', 'bg-opacity-50', 'z-50');
+            modal.classList.add('fixed', 'top-0', 'left-0', 'w-screen', 'h-screen', 'flex', 'justify-center',
+                'items-center', 'bg-black', 'bg-opacity-50', 'z-50');
 
             const modalContent = document.createElement('div');
-            modalContent.classList.add('bg-white', 'p-4', 'rounded', 'shadow-lg', 'text-center', 'flex', 'flex-col', 'gap-4');
+            modalContent.classList.add('bg-white', 'p-4', 'rounded', 'shadow-lg', 'text-center', 'flex', 'flex-col',
+                'gap-4');
 
             const modalMessage = document.createElement('span');
             modalMessage.innerText = message;
@@ -218,7 +225,8 @@
             modalInput.classList.add('border', 'border-gray-300', 'rounded', 'p-2');
 
             const modalSubmit = document.createElement('button');
-            modalSubmit.classList.add('bg-blue-500', 'text-white', 'rounded', 'p-2', 'hover:bg-blue-600', 'transition-colors', 'duration-200', 'ease-in-out');
+            modalSubmit.classList.add('bg-blue-500', 'text-white', 'rounded', 'p-2', 'hover:bg-blue-600',
+                'transition-colors', 'duration-200', 'ease-in-out');
             modalSubmit.innerText = 'Submit';
 
             modalSubmit.addEventListener('click', function() {
