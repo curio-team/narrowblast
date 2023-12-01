@@ -434,9 +434,23 @@
                     }
 
                     // Pausing auto-sliding if active
-                    if (window.RevealDeck.isAutoSliding()) {
-                        window.RevealDeck.toggleAutoSlide();
-                    }
+                    const currentTime = Date.now();
+
+                    // Looping through all slides and checking if they have been interacted within the timeout
+                    routesData.forEach((data, publicPath) => {
+                        const lastInteractionTime = slideInteractionTime.get(publicPath);
+                        const timeSinceLastInteraction = currentTime - lastInteractionTime;
+
+                        // If the slide has been interacted with within the timeout, then continue
+                        if (timeSinceLastInteraction < slideInteractionTimeout) {
+                            return;
+                        }
+
+                        // If the slide has not been interacted with within the timeout, then pause auto-sliding
+                        if (window.RevealDeck.isAutoSliding()) {
+                            window.RevealDeck.toggleAutoSlide();
+                        }
+                    });
 
                     console.log(data); // Logging the received data
 
