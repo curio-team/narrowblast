@@ -99,6 +99,10 @@
         window.addEventListener('message', function(event) {
             if (!window.enable_invite_system) return;
 
+            // Updating the last interaction time for the slide
+            const currentTime = Date.now();
+            slideInteractionTime.set(event.data.publicPath, currentTime);
+
             if (event.data.type === 'getInviteCode') {
                 // ! This is unreliable if we ever not have the id be the slide path
                 const slideId = window._narrowBlastPreviewSlideId ? window._narrowBlastPreviewSlideId : event.data.data.split('/').pop().split('.').shift();
