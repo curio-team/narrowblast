@@ -31,7 +31,7 @@
         </x-headings.area>
 
         {{-- TODO: Load messages from database instead of hard-coding them --}}
-        <x-card class="bg-lime-200">
+        <x-card background="bg-lime-200">
             <x-slot name="header">
                 Status update 1
             </x-slot>

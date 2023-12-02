@@ -1,6 +1,10 @@
+@props([
+    'background' => 'bg-white',
+])
 <x-stack-layout {{
     $attributes->class([
-        'bg-white shadow-md md:rounded p-4',
+        'shadow-md md:rounded p-4',
+        $background,
     ])
 }}>
     @isset($header)
