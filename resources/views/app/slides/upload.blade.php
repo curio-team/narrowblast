@@ -33,7 +33,7 @@
             </h4>
             <ul class="list-disc pl-4 flex flex-col gap-1">
                 <li>Een slide mag maar uit 1 enkel <strong>.html</strong> bestand bestaan</li>
-                <li>Test en ontwikkel voor een resolutie van <strong>1080x1920 (portret-modus)</strong></li>
+                <li>Test en ontwikkel voor een resolutie van <strong>768x1360 (portret-modus)</strong></li>
                 <li>
                     Gebruik <strong>geen externe afbeeldingen</strong>, maar converteer afbeeldingen naar een
                     <x-buttons.link href="https://www.base64-image.de/" target="_blank">base64</x-buttons.link>
