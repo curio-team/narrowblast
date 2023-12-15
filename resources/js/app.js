@@ -37,7 +37,7 @@ if (document.querySelector('.reveal')) {
     };
     // ! End of Workaround
 
-    // Go through all video elements in the slide, restarting them
+    // Inform the active slide that it moved into view
     reveal.on('slidechanged', event => {
         const slide = event.currentSlide;
         const slideContainer = slide.parentNode;
@@ -45,12 +45,24 @@ if (document.querySelector('.reveal')) {
         const backgroundContainer = slideContainer.parentNode.querySelector('.backgrounds');
         const background = backgroundContainer.children[indexInParent];
         const backgroundIframe = background.querySelector('iframe');
-        backgroundIframe.src = backgroundIframe.src;
+
+        if (!backgroundIframe) {
+            return;
+        }
+
+        backgroundIframe.contentWindow.postMessage({
+            type: 'onSlideMovedIntoView',
+            data: {
+                indexInParent,
+            },
+        }, '*');
     });
 
     reveal.on('slidetransitionend', event => {
         const slide = event.currentSlide;
         const allSlides = reveal.getSlides();
+
+        console.log(slide);
 
         window.revolutionCounter = window.revolutionCounter || 0;
         if (slide === allSlides[allSlides.length - 1] && window.revolutionCounter++ > 2) {
