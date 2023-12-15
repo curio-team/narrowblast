@@ -10,12 +10,32 @@
         const routesWithJavascript = new Map();
         const routesData = new Map();
         const routesIframes = new Map();
+        const slideInteractionTime = new Map(); // Map to store last interaction time for each slide
+        // TODO: Make this configurable
+        const slideInteractionTimeout = 25000; // Timeout for slide interaction in milliseconds
         let inviteCode = null;
 
         function setCurrentInviteCode(newInviteCode) {
             inviteCode = newInviteCode;
         }
         window.setCurrentInviteCode = setCurrentInviteCode;
+
+        function markInteraction(publicPath) {
+            const currentTime = Date.now();
+            slideInteractionTime.set(publicPath, currentTime);
+        }
+
+        function setAutoSlideEnabled(isEnabled) {
+            if (window.RevealDeck.isAutoSliding()) {
+                if (!isEnabled) {
+                    window.RevealDeck.toggleAutoSlide();
+                }
+            } else {
+                if (isEnabled) {
+                    window.RevealDeck.toggleAutoSlide();
+                }
+            }
+        }
 
         function updateSlideCreator(slide) {
             const slideCreator = document.getElementById('slideCreator');
@@ -107,10 +127,12 @@
                 });
             } else if (event.data.type === 'requestRedistributePrizePool') {
                 requestRedistributePrizePool(event.data.data, function (publicPath, wasSuccesful) {
+                    markInteraction(publicPath);
                     sendPostMessageToRelevantIframe(publicPath, 'onRedistributePrizePool', wasSuccesful);
                 });
             } else if (event.data.type === 'requestSetInteractionData') {
                 requestSetInteractionData(event.data.data, function (publicPath, wasSuccesful) {
+                    markInteraction(publicPath);
                     sendPostMessageToRelevantIframe(publicPath, 'onSetInteractionData', wasSuccesful);
                 });
             } else {
@@ -350,32 +372,48 @@
                     return;
                 }
 
-                if(window.RevealDeck.isAutoSliding()) {
-                    window.RevealDeck.toggleAutoSlide();
-                }
+                const publicPath = data.publicPath;
+                const currentTime = Date.now();
+
+                // Looping through all slides and checking if they have been interacted within the timeout
+                routesData.forEach((data, publicPath) => {
+                    const lastInteractionTime = slideInteractionTime.get(publicPath);
+                    const timeSinceLastInteraction = currentTime - lastInteractionTime;
+
+                    // If the slide has been interacted with within the timeout, then pause auto-sliding
+                    if (timeSinceLastInteraction < slideInteractionTimeout) {
+                        setAutoSlideEnabled(false);
+                    } else {
+                        // If the slide has not been interacted with within the timeout, then unpause auto-sliding
+                        setAutoSlideEnabled(true);
+                    }
+                });
 
                 console.log(data);
 
-                const routeData = routesData.get(data.publicPath) || {};
+                const routeData = routesData.get(publicPath) || {};
                 const invitees = routeData.invitees || [];
                 const newInvitees = data.invitees.filter(invitee => !invitees.find(i => i.id === invitee.id));
                 const leftInvitees = invitees.filter(invitee => !data.invitees.find(i => i.id === invitee.id));
 
                 for(const invitee of newInvitees) {
-                    sendPostMessageToRelevantIframe(data.publicPath, 'onInviteeJoin', invitee);
+                    markInteraction(publicPath);
+                    sendPostMessageToRelevantIframe(publicPath, 'onInviteeJoin', invitee);
                 }
 
                 for(const invitee of leftInvitees) {
-                    sendPostMessageToRelevantIframe(data.publicPath, 'onInviteeLeave', invitee);
+                    markInteraction(publicPath);
+                    sendPostMessageToRelevantIframe(publicPath, 'onInviteeLeave', invitee);
                 }
 
                 if(data.interactionData != null || data.interactionData != routeData.interactionData) {
-                    sendPostMessageToRelevantIframe(data.publicPath, 'onInteractionData', data.interactionData);
+                    markInteraction(publicPath);
+                    sendPostMessageToRelevantIframe(publicPath, 'onInteractionData', data.interactionData);
                 }
 
                 routeData.interactionData = data.interactionData;
                 routeData.invitees = data.invitees;
-                routesData.set(data.publicPath, routeData);
+                routesData.set(publicPath, routeData);
 
                 latestCsrfToken = data.csrfToken;
             })
