@@ -98,7 +98,7 @@ class InviteController extends Controller
     {
         // If we got here through a QR-code, we'll go straight through to the inviteProcess confirmation page
         if ($inviteCode !== null) {
-            $inviteSystem = \App\Models\InviteSystem::where('latest_code', $inviteCode)->firstOrFail();
+            $inviteSystem = InviteSystem::where('latest_code', $inviteCode)->firstOrFail();
 
             return view('app.slides.invite-confirm', [
                 'inviteSystem' => $inviteSystem,
@@ -132,7 +132,7 @@ class InviteController extends Controller
             ],
         ]);
 
-        $inviteSystem = \App\Models\InviteSystem::where('latest_code', $request->invite_code)->firstOrFail();
+        $inviteSystem = InviteSystem::where('latest_code', $request->invite_code)->firstOrFail();
 
         return view('app.slides.invite-confirm', [
             'inviteSystem' => $inviteSystem,
@@ -152,7 +152,7 @@ class InviteController extends Controller
             ],
         ]);
 
-        $inviteSystem = \App\Models\InviteSystem::where('latest_code', $request->invite_code)->firstOrFail();
+        $inviteSystem = InviteSystem::where('latest_code', $request->invite_code)->firstOrFail();
 
         // Check if the user has enough credits to enter
         if (!$inviteSystem->isPreview() && auth()->user()->credits < $inviteSystem->entry_fee_in_credits) {
@@ -271,8 +271,10 @@ class InviteController extends Controller
             $shopItemUserId = $slide->data['invite_system_shop_item_user_id'];
             $shopItemUser = ShopItemUser::findOrFail($shopItemUserId);
 
-            // TODO: Test this
-            $inviteSystem = new \App\Models\InviteSystem;
+            // Destroy existing invite systems for this slide
+            InviteSystem::where('shop_item_user_id', $shopItemUser->id)->delete();
+
+            $inviteSystem = new InviteSystem;
             $inviteSystem->title = $shopItemUser->data['invite_system_title'];
             $inviteSystem->description = $shopItemUser->data['invite_system_description'];
             $inviteSystem->latest_code = $inviteSystem->generateCode();
@@ -285,7 +287,7 @@ class InviteController extends Controller
             // Destroy existing preview invite systems for this user
             auth()->user()->inviteSystems()->where('shop_item_user_id', null)->delete();
 
-            $inviteSystem = new \App\Models\InviteSystem;
+            $inviteSystem = new InviteSystem;
             $inviteSystem->title = 'Preview';
             $inviteSystem->description = 'Preview';
             $inviteSystem->latest_code = $inviteSystem->generateCode();
@@ -358,7 +360,7 @@ class InviteController extends Controller
             ],
         ]);
 
-        $inviteSystem = \App\Models\InviteSystem::with('shopItemUser')
+        $inviteSystem = InviteSystem::with('shopItemUser')
             ->where('latest_code', $request->invite_code)
             ->firstOrFail();
         $this->checkSecretTickKey($request, $inviteSystem);
@@ -407,7 +409,7 @@ class InviteController extends Controller
             ],
         ]);
 
-        $inviteSystem = \App\Models\InviteSystem::where('latest_code', $request->invite_code)->firstOrFail();
+        $inviteSystem = InviteSystem::where('latest_code', $request->invite_code)->firstOrFail();
         $this->checkSecretTickKey($request, $inviteSystem);
 
         \DB::beginTransaction();
@@ -481,7 +483,7 @@ class InviteController extends Controller
             ],
         ]);
 
-        $inviteSystem = \App\Models\InviteSystem::where('latest_code', $request->invite_code)->firstOrFail();
+        $inviteSystem = InviteSystem::where('latest_code', $request->invite_code)->firstOrFail();
         $this->checkSecretTickKey($request, $inviteSystem);
 
         $inviteSystem->data = $request->interaction_data;

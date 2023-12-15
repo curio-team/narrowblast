@@ -261,7 +261,6 @@
                     errorAndReset(data.error);
                     return;
                 }
-                console.log(data);
 
                 setCurrentInviteCode(data.inviteCode);
                 callback(data.publicPath, data.inviteCode, data.inviteCodeQr);
