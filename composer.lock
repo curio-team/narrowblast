@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2de97dea55d0ee11a4588f5b9d59945a",
+    "content-hash": "8da019cdd74c84490ab021f10a71cd90",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -413,16 +413,16 @@
         },
         {
             "name": "curio/sdclient",
-            "version": "v4.0.0-alpha",
+            "version": "v4.1.1-alpha",
             "source": {
                 "type": "git",
                 "url": "https://github.com/curio-team/sdclient.git",
-                "reference": "34e154c48ebe1800942c3b5e0c0da61d5e6e9fbc"
+                "reference": "4d479c834da7994c4096f61c5d5138db3be0b22b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/curio-team/sdclient/zipball/34e154c48ebe1800942c3b5e0c0da61d5e6e9fbc",
-                "reference": "34e154c48ebe1800942c3b5e0c0da61d5e6e9fbc",
+                "url": "https://api.github.com/repos/curio-team/sdclient/zipball/4d479c834da7994c4096f61c5d5138db3be0b22b",
+                "reference": "4d479c834da7994c4096f61c5d5138db3be0b22b",
                 "shasum": ""
             },
             "require": {
@@ -456,9 +456,9 @@
             ],
             "description": "Client for sdlogin",
             "support": {
-                "source": "https://github.com/curio-team/sdclient/tree/v4.0.0-alpha"
+                "source": "https://github.com/curio-team/sdclient/tree/v4.1.1-alpha"
             },
-            "time": "2024-03-01T22:47:41+00:00"
+            "time": "2024-03-02T10:15:19+00:00"
         },
         {
             "name": "danharrin/date-format-converter",

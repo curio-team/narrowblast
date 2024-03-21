@@ -7,7 +7,7 @@
     "require": {
         "php": "^8.0.2",
         "barryvdh/laravel-dompdf": "^2.0",
-        "curio/sdclient": "v4.0.0-alpha",
+        "curio/sdclient": "^4.1@alpha",
         "danharrin/livewire-rate-limiting": "^1.2",
         "endroid/qr-code": "^4.8",
         "filament/filament": "^3.0-stable",
