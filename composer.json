@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.0.2",
         "barryvdh/laravel-dompdf": "^2.0",
+        "curio/sdclient": "^4.1@alpha",
         "danharrin/livewire-rate-limiting": "^1.2",
         "endroid/qr-code": "^4.8",
         "filament/filament": "^3.0-stable",
@@ -14,8 +15,7 @@
         "laravel/framework": "^9.2",
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
-        "livewire/livewire": "^3.0@beta",
-        "studiokaa/amoclient": "^3.0"
+        "livewire/livewire": "^3.0@beta"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

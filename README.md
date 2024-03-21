@@ -50,7 +50,7 @@ When we've been up and running for a couple months, we'll add the following feat
     * `npm run dev`
     * `composer install`
     * Create and configure the `.env` file:
-        * Fill `AMO_CLIENT_ID` and `AMO_CLIENT_SECRET` with the correct (secret) app secrets for the [amoclient OpenID auth](https://github.com/StudioKaa/amoclient)
+        * Fill `SD_CLIENT_ID` and `SD_CLIENT_SECRET` with the correct (secret) app secrets for the [sdclient OpenID auth](https://github.com/curio-team/sdclient)
         * Fill `SLIDE_SHOW_SECRET_TICK_KEY` with a random secret string. This is used to prevent spamming of the slideshow tick endpoint. When setting up a narrowcasting screen you will have to enter this.
         * Fill `USER_CONTENT_PATH` with the path to the directory where uploaded files should be stored. This directory should be accessible by the webserver.
         * Fill `USER_CONTENT_URL` with the URL to the directory where uploaded files should be accessible from. This domain should be different from the domain where the website is hosted. This is to prevent XSS attacks.
@@ -71,10 +71,8 @@ The website is now available for:
 #### Local Development Notes:
 
 ##### cURL error 60: SSL certificate expired
-Since you're running locally, you must disable SSL verification. This is done by applying the following workaround:
-* Change line `28` in `/vendor/studiokaa/amoclient/src/AmoclientController.php` to `$http = new \GuzzleHttp\Client(['curl' => [CURLOPT_SSL_VERIFYPEER => false]]);`. 
-
-On production you should just enable HTTPS.
+Since you're running locally, you must disable SSL verification. This is done by adding `SD_SSL_VERIFYPEER=no` to your .env.
+This is only recommended for during development and only on trusted networks. On production you should just enable HTTPS.
 
 ### Production Notes
 * Be sure that Apache has permission to the correct files and directories. E.g: run `sudo chown -R www-data:www-data /path/to/this/repo/root`
